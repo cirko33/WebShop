@@ -12,9 +12,7 @@ namespace OnlineStoreApp.Models
         [Required]
         public string? Email { get; set; }
         [Required]
-        public string? Firstname { get; set; }
-        [Required]
-        public string? Lastname { get; set; }
+        public string? FullName { get; set; }
         [Required]
         public DateTime Birthday { get; set; }
         [Required]
