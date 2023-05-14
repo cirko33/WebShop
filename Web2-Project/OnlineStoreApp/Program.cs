@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true
     };
-}).AddGoogle();
+});
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
