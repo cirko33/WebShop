@@ -4,9 +4,9 @@ namespace OnlineStoreApp.DTOs
 {
     public class LoginDTO
     {
-        [Required]
-        public string? Username { get; set; }
-        [Required]
+        [Required, MaxLength(100)]
+        public string? Email { get; set; }
+        [Required, MaxLength(100)]
         public string? Password { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace OnlineStoreApp.Models
     public class Order : BaseClass
     {
         public List<Item>? Items { get; set; }
-        [Required]
+        [Required, MaxLength(100)]
         public string? DeliveryAddress { get; set; }
         [Required]
         public DateTime DeliveryTime { get; set; }

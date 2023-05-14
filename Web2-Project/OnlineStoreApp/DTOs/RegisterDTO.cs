@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnlineStoreApp.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace OnlineStoreApp.Models
+namespace OnlineStoreApp.DTOs
 {
-    public enum UserType { Administrator, Seller, Buyer }
-    public class User : BaseClass
+    public class RegisterDTO
     {
         [Required, MaxLength(100)]
         public string? Username { get; set; }
-        [Required, MaxLength(300)]
+        [Required, MaxLength(100)]
         public string? Password { get; set; }
         [Required, MaxLength(100)]
         public string? Email { get; set; }

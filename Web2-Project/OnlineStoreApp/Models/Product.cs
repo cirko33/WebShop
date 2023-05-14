@@ -4,7 +4,7 @@ namespace OnlineStoreApp.Models
 {
     public class Product : BaseClass
     {
-        [Required, MaxLength(50)]
+        [Required, MaxLength(100)]
         public string? Name { get; set; }
         [Required]
         public double Price { get; set; }

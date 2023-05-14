@@ -9,7 +9,7 @@ namespace OnlineStoreApp.Settings
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.DeliveryAddress).IsRequired();
+            builder.Property(x => x.DeliveryAddress).HasMaxLength(200).IsRequired();
             builder.Property(x => x.DeliveryTime).IsRequired();
             builder.Property(x => x.Comment).HasMaxLength(200);
             builder.Property(x => x.IsDeleted).HasDefaultValue(false);
