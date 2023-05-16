@@ -12,7 +12,7 @@ using OnlineStoreApp.Settings;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20230514132622_Init")]
+    [Migration("20230515123839_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -80,6 +80,10 @@ namespace OnlineStoreApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -175,6 +179,10 @@ namespace OnlineStoreApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("VerificationStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -194,9 +202,10 @@ namespace OnlineStoreApp.Migrations
                             Email = "luka@luka.com",
                             FullName = "Luka Ciric",
                             IsDeleted = false,
-                            Password = "$2a$11$.IXiisim0VL8ybk7a6BIROGb215Q6sOyXVcb7dXhq/V7hOqnz.pBO",
+                            Password = "$2a$11$5uNk1lXVG7VofPU3Zvmvd.pTS5iV78jgp6vDPFVr/u6iTM/sqzt6m",
                             Type = "Administrator",
-                            Username = "luka"
+                            Username = "luka",
+                            VerificationStatus = "Waiting"
                         });
                 });
 

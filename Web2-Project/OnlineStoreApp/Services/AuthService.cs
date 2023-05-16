@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
@@ -35,14 +36,22 @@ namespace OnlineStoreApp.Services
             if (!BC.BCrypt.Verify(loginDTO.Password, user.Password))
                 throw new BadRequestException("Invalid password");
 
+            if(user.Type == UserType.Seller)
+            {
+                if(user.VerificationStatus == VerificationStatus.Waiting)
+                    throw new BadRequestException("You are not verified. Wait to be verified by administrators.");
+                if (user.VerificationStatus == VerificationStatus.Declined)
+                    throw new BadRequestException("You were declined by administrators. Contact to see why.");
+            }   
+                
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim(ClaimTypes.Name, user.Username!),
+                new Claim(ClaimTypes.Role, user.Type.ToString()),
                 new Claim("Id", user.Id.ToString()),
                 new Claim("Email", user.Email!),
-                new Claim("Type", user.Type.ToString())
             };
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
@@ -62,6 +71,9 @@ namespace OnlineStoreApp.Services
 
         public async Task Register(RegisterDTO registerDTO)
         {
+            if(registerDTO.Type == UserType.Administrator)
+                throw new BadRequestException("Can't register admin user!");
+
             if ((await _unitOfWork.Users.Get(x => x.Email == registerDTO.Email)) != null)
                 throw new BadRequestException("Email already exists.");
 
@@ -71,6 +83,8 @@ namespace OnlineStoreApp.Services
             registerDTO.Password = BC.BCrypt.HashPassword(registerDTO.Password);
 
             var user = _mapper.Map<User>(registerDTO);
+            user.VerificationStatus = user.Type == UserType.Seller ? VerificationStatus.Waiting : VerificationStatus.Accepted;
+
             await _unitOfWork.Users.Insert(user);
             await _unitOfWork.Save();
         }

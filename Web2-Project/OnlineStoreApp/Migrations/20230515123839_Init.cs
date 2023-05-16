@@ -20,6 +20,7 @@ namespace OnlineStoreApp.Migrations
                     DeliveryAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DeliveryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -58,6 +59,7 @@ namespace OnlineStoreApp.Migrations
                     Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
@@ -96,8 +98,8 @@ namespace OnlineStoreApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Address", "Birthday", "Email", "FullName", "Image", "Password", "Type", "Username" },
-                values: new object[] { 1, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka@luka.com", "Luka Ciric", null, "$2a$11$.IXiisim0VL8ybk7a6BIROGb215Q6sOyXVcb7dXhq/V7hOqnz.pBO", "Administrator", "luka" });
+                columns: new[] { "Id", "Address", "Birthday", "Email", "FullName", "Image", "Password", "Type", "Username", "VerificationStatus" },
+                values: new object[] { 1, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka@luka.com", "Luka Ciric", null, "$2a$11$5uNk1lXVG7VofPU3Zvmvd.pTS5iV78jgp6vDPFVr/u6iTM/sqzt6m", "Administrator", "luka", "Waiting" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Item_OrderId",

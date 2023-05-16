@@ -58,6 +58,7 @@ builder.Services.AddScoped<DbContext, StoreDbContext>();
 builder.Services.AddScoped<ExceptionMiddleware>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IAdministrationService, AdministrationService>();
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
 builder.Services.AddAuthentication(options =>
@@ -78,7 +79,12 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true
     };
+}).AddGoogle(o =>
+{
+    o.ClientId = builder.Configuration["Google:ClientID"];
+    o.ClientSecret = builder.Configuration["Google:ClientSecret"];
 });
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

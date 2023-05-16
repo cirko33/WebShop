@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using OnlineStoreApp.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace OnlineStoreApp.Settings
 {
@@ -13,6 +14,7 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.DeliveryTime).IsRequired();
             builder.Property(x => x.Comment).HasMaxLength(200);
             builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+            builder.Property(x => x.OrderStatus).HasConversion(new EnumToStringConverter<OrderStatus>()).IsRequired();
         }
     }
 }

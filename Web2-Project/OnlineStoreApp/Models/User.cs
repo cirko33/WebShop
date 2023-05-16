@@ -2,7 +2,8 @@
 
 namespace OnlineStoreApp.Models
 {
-    public enum UserType { Administrator, Seller, Buyer }
+    public enum UserType { Administrator = 0, Seller = 1, Buyer = 2}
+    public enum VerificationStatus { Waiting = 0, Accepted = 1, Declined = 2}
     public class User : BaseClass
     {
         [Required, MaxLength(100)]
@@ -19,6 +20,8 @@ namespace OnlineStoreApp.Models
         public string? Address { get; set; }
         [Required]
         public UserType Type { get; set; }
+        [Required]
+        public VerificationStatus VerificationStatus { get; set; }
         public byte[]? Image { get; set; }
     }
 }
