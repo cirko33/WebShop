@@ -59,6 +59,10 @@ builder.Services.AddScoped<ExceptionMiddleware>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IAdministrationService, AdministrationService>();
+builder.Services.AddScoped<IBuyerService, BuyerService>();
+builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
 builder.Services.AddAuthentication(options =>

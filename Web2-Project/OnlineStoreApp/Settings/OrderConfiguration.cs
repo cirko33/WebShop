@@ -15,6 +15,16 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.Comment).HasMaxLength(200);
             builder.Property(x => x.IsDeleted).HasDefaultValue(false);
             builder.Property(x => x.OrderStatus).HasConversion(new EnumToStringConverter<OrderStatus>()).IsRequired();
+            builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
+
+            builder.HasData(new Order
+            {
+                Id = 1,
+                DeliveryAddress = "123",
+                DeliveryTime = DateTime.Now.AddMinutes(78),
+                OrderStatus = OrderStatus.InDelivery,
+                UserId = 3
+            });
         }
     }
 }

@@ -18,7 +18,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("VerifiedUsers")]
+        [HttpGet("verified-users")]
         public async Task<IActionResult> GetVerifiedUsers()
         {
             var users = await _administrationService.GetVerifiedUsers();
@@ -26,15 +26,15 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("WaitingUsers")]
-        public async Task<IActionResult> GetWaitngUsers()
+        [HttpGet("waiting-users")]
+        public async Task<IActionResult> GetWaitingUsers()
         {
             var users = await _administrationService.GetWaitingUsers();
             return Ok(new { users = users });
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPost("VerifyUser")]
+        [HttpPost("verify-user")]
         public async Task<IActionResult> GetWaitngUsers(VerifyDTO verifyDTO)
         {
             await _administrationService.SetUserStatus(verifyDTO);
@@ -42,7 +42,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("AllOrders")]
+        [HttpGet("orders")]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _administrationService.GetAllOrders();

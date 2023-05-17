@@ -1,38 +1,112 @@
-﻿using OnlineStoreApp.Interfaces.IServices;
+﻿using AutoMapper;
+using OnlineStoreApp.DTOs;
+using OnlineStoreApp.Exceptions;
+using OnlineStoreApp.Interfaces;
+using OnlineStoreApp.Interfaces.IServices;
 using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Services
 {
     public class SellerService : ISellerService
     {
-        public Task AddProduct(Product product)
+        IUnitOfWork _unitOfWork;
+        IMapper _mapper;
+
+        public SellerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public Task DeleteProduct(int id)
+        public async Task AddProduct(CreateProductDTO product, int userId)
         {
-            throw new NotImplementedException();
+            var prod = _mapper.Map<Product>(product);
+            if((await _unitOfWork.Users.Get(x => x.Id == userId)) == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            prod.SellerId = userId;
+            await _unitOfWork.Products.Insert(prod);
+            await _unitOfWork.Save();
         }
 
-        public Task<List<Order>> GetNewOrders()
+        public async Task DeleteProduct(int id, int userId)
         {
-            throw new NotImplementedException();
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            var product = user.Products!.Find(x => x.Id == id);
+            if (product == null)
+                throw new BadRequestException("This product isn't yours");
+
+            product.IsDeleted = true;
+            _unitOfWork.Products.Update(product);
+            await _unitOfWork.Save();
         }
 
-        public Task<List<Order>> GetOrders()
+        public async Task<List<OrderDTO>> GetNewOrders(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            var orders = await _unitOfWork.Orders.GetAll(x => x.OrderStatus == OrderStatus.InDelivery, null, new List<string> { "Items" });
+            if(orders != null)
+                orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
+                
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
 
-        public Task<List<Product>> GetProducts()
+        public async Task<List<OrderDTO>> GetOrders(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items" });
+            if (orders != null)
+                orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
+
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
 
-        public Task UpdateProduct(int id, Product product)
+        public async Task<ProductDTO> GetProduct(int id, int userId)
         {
-            throw new NotImplementedException();
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            var product = user.Products!.Find(x => x.Id == id);
+            if (product == null)
+                throw new BadRequestException("This product doesn't belong to you");
+
+            return _mapper.Map<ProductDTO>(product);
+        }
+
+        public async Task<List<ProductDTO>> GetProducts(int userId)
+        {
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            return _mapper.Map<List<ProductDTO>>(user.Products!);
+        }
+
+        public async Task UpdateProduct(int id, ProductDTO product, int userId)
+        {
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" });
+            if (user == null)
+                throw new BadRequestException("Error with id in token. Logout and login again");
+
+            var prod = user.Products!.Find(x => x.Id == id);
+            if (prod == null)
+                throw new BadRequestException("This product doesn't belong to you");
+
+            prod.Amount = product.Amount;
+            prod.Name = product.Name;
+            prod.Description = product.Description;
+            prod.Price = product.Price;
+            prod.Image = product.Image;
         }
     }
 }

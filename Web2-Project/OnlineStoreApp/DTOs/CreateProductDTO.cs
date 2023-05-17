@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineStoreApp.Models
+namespace OnlineStoreApp.DTOs
 {
-    public class Product : BaseClass
+    public class CreateProductDTO
     {
         [Required, MaxLength(100)]
         public string? Name { get; set; }
@@ -14,9 +14,5 @@ namespace OnlineStoreApp.Models
         public string? Description { get; set; }
         [Required]
         public byte[]? Image { get; set; }
-        [Required]
-        public int SellerId { get; set; }
-        public User? Seller { get; set; }
-        public List<Item>? Items { get; set; }
     }
 }

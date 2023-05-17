@@ -20,11 +20,14 @@ namespace OnlineStoreApp.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
+        private readonly IMailService _mailService;
+
+        public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _mapper = mapper;
+            _mailService = mailService;
         }
 
         public async Task<string> Login(LoginDTO loginDTO)
@@ -84,7 +87,9 @@ namespace OnlineStoreApp.Services
 
             var user = _mapper.Map<User>(registerDTO);
             user.VerificationStatus = user.Type == UserType.Seller ? VerificationStatus.Waiting : VerificationStatus.Accepted;
-
+            
+            if (user.Type == UserType.Seller)
+                await _mailService.SendEmail("Account verification", "Sorry to keep you waiting, the first available administrator will verify your account.", user.Email!);
             await _unitOfWork.Users.Insert(user);
             await _unitOfWork.Save();
         }

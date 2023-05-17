@@ -12,7 +12,7 @@ using OnlineStoreApp.Settings;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20230515123839_Init")]
+    [Migration("20230516220738_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace OnlineStoreApp.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<double>("CurrentPrice")
+                        .HasColumnType("float");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -54,6 +57,17 @@ namespace OnlineStoreApp.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Item");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 5,
+                            CurrentPrice = 100.0,
+                            IsDeleted = false,
+                            OrderId = 1,
+                            ProductId = 1
+                        });
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Order", b =>
@@ -85,9 +99,25 @@ namespace OnlineStoreApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DeliveryAddress = "123",
+                            DeliveryTime = new DateTime(2023, 5, 17, 1, 25, 37, 363, DateTimeKind.Local).AddTicks(8217),
+                            IsDeleted = false,
+                            OrderStatus = "InDelivery",
+                            UserId = 3
+                        });
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
@@ -123,12 +153,30 @@ namespace OnlineStoreApp.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("SellerId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("SellerId");
+
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 10,
+                            Description = "123",
+                            Image = new byte[] { 84, 101, 115, 116 },
+                            IsDeleted = false,
+                            Name = "Test",
+                            Price = 100.0,
+                            SellerId = 2
+                        });
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.User", b =>
@@ -202,9 +250,35 @@ namespace OnlineStoreApp.Migrations
                             Email = "luka@luka.com",
                             FullName = "Luka Ciric",
                             IsDeleted = false,
-                            Password = "$2a$11$5uNk1lXVG7VofPU3Zvmvd.pTS5iV78jgp6vDPFVr/u6iTM/sqzt6m",
+                            Password = "$2a$11$dkGOVvKjRUnOG1qPGFC5cuY2u0qp5vceZquTZfsGu7w5HiWk7GWbq",
                             Type = "Administrator",
                             Username = "luka",
+                            VerificationStatus = "Waiting"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Nest 123",
+                            Birthday = new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "luka1@luka.com",
+                            FullName = "Luka Ciric",
+                            IsDeleted = false,
+                            Password = "$2a$11$TZV6Lv8BB69Ga6Ekz5tjR.Gz6ygP012uZH7pWk/oSxThs2f3HAcCK",
+                            Type = "Seller",
+                            Username = "luka1",
+                            VerificationStatus = "Waiting"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Nest 123",
+                            Birthday = new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "luka2@luka.com",
+                            FullName = "Luka Ciric",
+                            IsDeleted = false,
+                            Password = "$2a$11$wGZFbEsA3HIEw8lTC4gMtuPSa5tmGuMcjLrBhMt57Zr4lNiRgmre.",
+                            Type = "Buyer",
+                            Username = "luka2",
                             VerificationStatus = "Waiting"
                         });
                 });
@@ -218,9 +292,9 @@ namespace OnlineStoreApp.Migrations
                         .IsRequired();
 
                     b.HasOne("OnlineStoreApp.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -230,7 +304,41 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.Order", b =>
                 {
+                    b.HasOne("OnlineStoreApp.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
+                {
+                    b.HasOne("OnlineStoreApp.Models.User", "Seller")
+                        .WithMany("Products")
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Seller");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Order", b =>
+                {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

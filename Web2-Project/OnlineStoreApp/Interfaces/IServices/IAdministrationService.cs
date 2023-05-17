@@ -5,9 +5,9 @@ namespace OnlineStoreApp.Interfaces.IServices
 {
     public interface IAdministrationService
     {
-        public Task<List<Order>> GetAllOrders();
-        public Task<List<User>> GetWaitingUsers();
-        public Task<List<User>> GetVerifiedUsers();
+        public Task<List<OrderDTO>> GetAllOrders();
+        public Task<List<UserDTO>> GetWaitingUsers();
+        public Task<List<UserDTO>> GetVerifiedUsers();
         public Task SetUserStatus(VerifyDTO verifyDTO);
     }
 }

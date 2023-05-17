@@ -18,7 +18,7 @@ namespace OnlineStoreApp.Controllers
             _authService = authService;
         }
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var token = await _authService.Login(loginDTO);
@@ -26,13 +26,12 @@ namespace OnlineStoreApp.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
             await _authService.Register(registerDTO);
             return Ok();
         }
-
 
     }
 }

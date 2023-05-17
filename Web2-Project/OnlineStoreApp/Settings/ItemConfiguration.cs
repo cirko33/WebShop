@@ -11,7 +11,19 @@ namespace OnlineStoreApp.Settings
         {
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Order).WithMany(x => x.Items).HasForeignKey(x => x.OrderId);
+            builder.HasOne(x => x.Product).WithMany(x => x.Items).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.NoAction);
+            builder.Property(x => x.CurrentPrice).IsRequired();
+            builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+
+            builder.HasData(new Item
+            {
+                Id = 1,
+                ProductId = 1,
+                OrderId = 1,
+                CurrentPrice = 100,
+                Amount = 5
+            });
         }
     }
 }

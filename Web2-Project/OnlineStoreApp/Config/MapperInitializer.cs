@@ -9,8 +9,16 @@ namespace OnlineStoreApp.Config
         public MapperInitializer()
         {
             CreateMap<User, RegisterDTO>().ReverseMap();
-            CreateMap<User, ProfileDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, EditProfileDTO>().ReverseMap();
+
+            CreateMap<Order, CreateOrderDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>().ReverseMap();
+
+            CreateMap<Item, OrderItemDTO>().ReverseMap();
+            
+            CreateMap<Product, CreateProductDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
         }
     }
 }

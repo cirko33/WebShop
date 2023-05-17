@@ -13,5 +13,8 @@ namespace OnlineStoreApp.Models
         public string? Comment { get; set; }
         [Required]
         public OrderStatus OrderStatus { get; set; }
+        [Required]
+        public int UserId { get; set; }
+        public User? User { get; set; }
     }
 }

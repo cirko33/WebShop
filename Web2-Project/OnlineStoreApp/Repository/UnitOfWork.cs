@@ -7,23 +7,19 @@ namespace OnlineStoreApp.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreDbContext _context;
-        private IRepository<User>? _users;
-        private IRepository<Order>? _orders;
-        private IRepository<Item>? _items;
-        private IRepository<Product>? _products;
+        public IRepository<User> Users { get; }
+        public IRepository<Order> Orders { get; }
+        public IRepository<Item> Items { get; }
+        public IRepository<Product> Products { get; }
 
-        public UnitOfWork(StoreDbContext context)
+        public UnitOfWork(StoreDbContext context, IRepository<User> users, IRepository<Order> orders, IRepository<Item> items, IRepository<Product> products)
         {
             _context = context;
+            Users = users;
+            Orders = orders;
+            Items = items;
+            Products = products;
         }
-
-        public IRepository<User> Users => _users ??= new Repository<User>(_context);
-
-        public IRepository<Order> Orders => _orders ??= new Repository<Order>(_context);
-
-        public IRepository<Item> Items => _items ??= new Repository<Item>(_context);
-
-        public IRepository<Product> Products => _products ??= new Repository<Product>(_context);
 
         public async Task Save()
         {

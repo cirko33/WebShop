@@ -1,4 +1,5 @@
-﻿using OnlineStoreApp.DTOs;
+﻿using AutoMapper;
+using OnlineStoreApp.DTOs;
 using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces;
 using OnlineStoreApp.Interfaces.IServices;
@@ -9,25 +10,36 @@ namespace OnlineStoreApp.Services
     public class AdministrationService : IAdministrationService
     {
         IUnitOfWork _unitOfWork;
-
-        public AdministrationService(IUnitOfWork unitOfWork)
+        IMailService _mailService;
+        IMapper _mapper;
+        public AdministrationService(IUnitOfWork unitOfWork, IMailService mailService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mailService = mailService;
+            _mapper = mapper;
         }
 
-        public async Task<List<Order>> GetAllOrders()
+        public async Task<List<OrderDTO>> GetAllOrders()
         {
-            return (await _unitOfWork.Orders.GetAll()).ToList();
+            var orders = await _unitOfWork.Orders.GetAll();
+            foreach (var order in orders)
+            {
+                order.Items = (await _unitOfWork.Items.GetAll(x => x.OrderId == order.Id)).ToList();
+            }
+            
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
 
-        public async Task<List<User>> GetVerifiedUsers()
+        public async Task<List<UserDTO>> GetVerifiedUsers()
         {
-            return (await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Accepted && x.Type == UserType.Seller)).ToList();
+            var users = await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Accepted && x.Type == UserType.Seller);
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public async Task<List<User>> GetWaitingUsers()
+        public async Task<List<UserDTO>> GetWaitingUsers()
         {
-            return (await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Waiting && x.Type == UserType.Seller)).ToList();
+            var users = await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Waiting && x.Type == UserType.Seller);
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
         public async Task SetUserStatus(VerifyDTO verifyDTO)
@@ -36,8 +48,14 @@ namespace OnlineStoreApp.Services
             if (user == null)
                 throw new BadRequestException("User with this ID doesn't exist.");
 
+            if (user.VerificationStatus != VerificationStatus.Waiting)
+                throw new BadRequestException("Only verify waiting users");
+
             user.VerificationStatus = verifyDTO.VerificationStatus;
             _unitOfWork.Users.Update(user);
+
+            string message = user.VerificationStatus == VerificationStatus.Accepted ? $"You have been verified.\r\nYou can now sell." : "Your verification has been denied.\r\nPlease contact administrators.";
+            await _mailService.SendEmail("Verification status", message, user.Email!);
             await _unitOfWork.Save();
         }
     }

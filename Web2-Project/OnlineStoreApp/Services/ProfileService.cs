@@ -49,13 +49,13 @@ namespace OnlineStoreApp.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<ProfileDTO> GetProfile(int id)
+        public async Task<UserDTO> GetProfile(int id)
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == id);
             if (user == null)
                 throw new BadRequestException("Error with id in token. Logout and login again");
 
-            return _mapper.Map<ProfileDTO>(user);
+            return _mapper.Map<UserDTO>(user);
         }
     }
 }

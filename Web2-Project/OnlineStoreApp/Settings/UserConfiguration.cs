@@ -32,6 +32,29 @@ namespace OnlineStoreApp.Settings
                 Address = "Nest 123",
                 Type = UserType.Administrator,
                 Birthday = new DateTime(1978, 12, 11)
+            },
+            new User
+            {
+                Id = 2,
+                Username = "luka1",
+                Email = "luka1@luka.com",
+                FullName = "Luka Ciric",
+                Password = BCrypt.Net.BCrypt.HashPassword("123"),
+                Address = "Nest 123",
+                Type = UserType.Seller,
+                Birthday = new DateTime(1978, 12, 11),
+                VerificationStatus = VerificationStatus.Waiting,
+            },
+            new User
+            {
+                Id = 3,
+                Username = "luka2",
+                Email = "luka2@luka.com",
+                FullName = "Luka Ciric",
+                Password = BCrypt.Net.BCrypt.HashPassword("123"),
+                Address = "Nest 123",
+                Type = UserType.Buyer,
+                Birthday = new DateTime(1978, 12, 11)
             });
         }
     }
