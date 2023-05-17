@@ -67,15 +67,10 @@ namespace OnlineStoreApp.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public void Logout()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Register(RegisterDTO registerDTO)
         {
-            if(registerDTO.Type == UserType.Administrator)
-                throw new BadRequestException("Can't register admin user!");
+            if(registerDTO.Type == UserType.Administrator) 
+                throw new UnauthorizedException("Can't register admin user!");
 
             if ((await _unitOfWork.Users.Get(x => x.Email == registerDTO.Email)) != null)
                 throw new BadRequestException("Email already exists.");

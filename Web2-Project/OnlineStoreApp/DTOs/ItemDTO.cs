@@ -3,13 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineStoreApp.DTOs
 {
-    public class OrderItemDTO
+    public class ItemDTO : CreateItemDTO
     {
-        [Required]
-        public int ProductId { get; set; }
         public CreateProductDTO? Product { get; set; }
-        [Required]
-        public int Amount { get; set; }
-
     }
 }

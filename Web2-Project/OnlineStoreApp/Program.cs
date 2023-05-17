@@ -65,6 +65,15 @@ builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
+
+builder.Services.AddCors( o =>
+{
+    o.AddPolicy("All", p =>
+    {
+        p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -98,6 +107,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("All");
 
 app.UseMiddleware<ExceptionMiddleware>();
 

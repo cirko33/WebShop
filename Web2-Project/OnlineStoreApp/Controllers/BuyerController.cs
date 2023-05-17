@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineStoreApp.DTOs;
 using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces.IServices;
+using System.Text;
 
 namespace OnlineStoreApp.Controllers
 {

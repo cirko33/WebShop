@@ -8,6 +8,6 @@ namespace OnlineStoreApp.DTOs
         [Required, MaxLength(100)]
         public string? DeliveryAddress { get; set; }
         public string? Comment { get; set; }
-        public List<OrderItemDTO>? Items { get; set; }
+        public List<CreateItemDTO>? Items { get; set; }
     }
 }

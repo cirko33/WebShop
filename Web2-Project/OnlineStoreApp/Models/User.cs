@@ -6,11 +6,11 @@ namespace OnlineStoreApp.Models
     public enum VerificationStatus { Waiting = 0, Accepted = 1, Declined = 2}
     public class User : BaseClass
     {
-        [Required, MaxLength(100)]
+        [Required, MaxLength(100), RegularExpression("[a-zA-Z0-9]+")]
         public string? Username { get; set; }
         [Required, MaxLength(300)]
         public string? Password { get; set; }
-        [Required, MaxLength(100)]
+        [Required, MaxLength(100), EmailAddress]
         public string? Email { get; set; }
         [Required, MaxLength(100)]
         public string? FullName { get; set; }

@@ -12,7 +12,7 @@ namespace OnlineStoreApp.DTOs
         public int Amount { get; set; }
         [Required, MaxLength(200)]
         public string? Description { get; set; }
-        [Required]
         public byte[]? Image { get; set; }
+        public string? ImageToImg { get; set; }
     }
 }

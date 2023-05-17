@@ -31,7 +31,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Seller")]
-        [HttpGet("new-orders")]
+        [HttpGet("new-products")]
         public async Task<IActionResult> GetNewOrders()
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
@@ -48,8 +48,24 @@ namespace OnlineStoreApp.Controllers
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
                 throw new BadRequestException("Bad ID. Logout and login.");
 
-            var orders = await _sellerService.GetProducts(id);
-            return Ok(new { orders = orders });
+            var products = await _sellerService.GetProducts(id);
+            products.ForEach(x =>
+            {
+                x.ImageToImg = "data:image/png;base64" + Convert.ToBase64String(x.Image!);
+                x.Image = null;
+            });
+            return Ok(new { products = products });
+        }
+
+        [Authorize(Roles = "Seller")]
+        [HttpPost("products/image")]
+        public async Task<IActionResult> UpdateImage(int id, IFormFile image)
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                throw new BadRequestException("Bad ID. Logout and login.");
+
+            await _sellerService.AddImage(id, userId, image);
+            return Ok();
         }
 
         [Authorize(Roles = "Seller")]

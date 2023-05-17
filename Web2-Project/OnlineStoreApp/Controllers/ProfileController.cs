@@ -38,5 +38,27 @@ namespace OnlineStoreApp.Controllers
             await _profileService.EditProfile(id, editProfileDTO);
             return Ok();
         }
+
+        [Authorize]
+        [HttpPost("image")]
+        public async Task<IActionResult> UploadImage(IFormFile image)
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
+                throw new BadRequestException("Bad ID. Logout and login.");
+
+            await _profileService.AddImage(id, image);
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("image")]
+        public async Task<IActionResult> GetImage()
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
+                throw new BadRequestException("Bad ID. Logout and login.");
+
+            var image = await _profileService.GetImage(id);
+            return File(image!, "image/*");
+        }
     }
 }

@@ -4,6 +4,7 @@ using OnlineStoreApp.DTOs;
 using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces;
 using OnlineStoreApp.Interfaces.IServices;
+using System.Text;
 using BC = BCrypt.Net;
 
 namespace OnlineStoreApp.Services
@@ -17,12 +18,24 @@ namespace OnlineStoreApp.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        public async Task AddImage(int id, IFormFile image)
+        {
+            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
+
+            using (var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                user.Image = ms.ToArray();
+            }
+            _unitOfWork.Users.Update(user);
+            await _unitOfWork.Save();
+        }
+
         public async Task EditProfile(int id, EditProfileDTO profile)
         {
-            var user = await _unitOfWork.Users.Get(x => x.Id == id);
-            if (user == null)
-                throw new BadRequestException("Error with id in token. Logout and login again");
-
+            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
+       
             if (profile.Password != null && profile.NewPassword != null)
             {
                 if (!BC.BCrypt.Verify(profile.Password, user.Password))
@@ -49,11 +62,15 @@ namespace OnlineStoreApp.Services
             await _unitOfWork.Save();
         }
 
+        public async Task<byte[]?> GetImage(int id)
+        {
+            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
+            return user.Image ?? throw new NotFoundException("No image.");
+        }
+
         public async Task<UserDTO> GetProfile(int id)
         {
-            var user = await _unitOfWork.Users.Get(x => x.Id == id);
-            if (user == null)
-                throw new BadRequestException("Error with id in token. Logout and login again");
+            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again"); 
 
             return _mapper.Map<UserDTO>(user);
         }

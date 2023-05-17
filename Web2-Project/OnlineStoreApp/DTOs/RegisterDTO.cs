@@ -5,11 +5,11 @@ namespace OnlineStoreApp.DTOs
 {
     public class RegisterDTO
     {
-        [Required, MaxLength(100)]
+        [Required, MaxLength(100), RegularExpression("[a-zA-Z0-9]+")]
         public string? Username { get; set; }
         [Required, MaxLength(100)]
         public string? Password { get; set; }
-        [Required, MaxLength(100)]
+        [Required, MaxLength(100), EmailAddress]
         public string? Email { get; set; }
         [Required, MaxLength(100)]
         public string? FullName { get; set; }
@@ -19,6 +19,5 @@ namespace OnlineStoreApp.DTOs
         public string? Address { get; set; }
         [Required]
         public UserType Type { get; set; }
-        public byte[]? Image { get; set; }
     }
 }
