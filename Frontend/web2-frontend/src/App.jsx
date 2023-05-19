@@ -1,10 +1,16 @@
 import './App.css'
-import Login from './components/Login/Login'
+import Navbar from './components/Navigation/Navbar';
+import Router from './router/Router';
+
+
 
 const App = () => {
   return (
     <>
-      <Login />
+      <Navbar />
+      <div className="container">
+        <Router />
+      </div>
     </>
   )
 }
