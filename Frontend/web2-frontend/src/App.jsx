@@ -1,5 +1,5 @@
 import './App.css'
-import Navbar from './components/Navigation/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Router from './router/Router';
 
 
@@ -9,7 +9,11 @@ const App = () => {
     <>
       <Navbar />
       <div className="container">
-        <Router />
+        <div className="overlay">
+          <div className="content">
+            <Router />
+          </div>
+        </div>
       </div>
     </>
   )

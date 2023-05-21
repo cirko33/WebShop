@@ -15,7 +15,7 @@ export const AuthContextProvider = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setToken(sessionStorage.getItem('token'));
+        setToken(localStorage.getItem('token'));
     }, []);
 
     const loginHandler = async(loginData) => {
@@ -43,7 +43,6 @@ export const AuthContextProvider = (props) => {
             if(!token)
                 return null;
             const tokenDecoded = jwtDecode(token);
-            console.log("🚀 ~ file: auth-context.js:48 ~ userType ~ tokenDecoded:", tokenDecoded)
             return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
             ;
         } catch(e) {
