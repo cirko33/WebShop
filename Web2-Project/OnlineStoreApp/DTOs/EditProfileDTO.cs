@@ -20,5 +20,6 @@ namespace OnlineStoreApp.DTOs
         [Required, MaxLength(100)]
         public string? Address { get; set; }
         public byte[]? Image { get; set; }
+        public IFormFile? ImageFile { get; set;}
     }
 }

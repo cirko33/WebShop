@@ -27,7 +27,7 @@ namespace OnlineStoreApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDTO registerDTO)
+        public async Task<IActionResult> Register([FromForm] RegisterDTO registerDTO)
         {
             await _authService.Register(registerDTO);
             return Ok();

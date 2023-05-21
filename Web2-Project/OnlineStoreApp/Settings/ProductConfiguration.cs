@@ -15,7 +15,7 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(200);
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
 
             builder.HasData(new Product
             {

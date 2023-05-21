@@ -87,14 +87,20 @@ namespace OnlineStoreApp.Migrations
                     b.Property<DateTime>("DeliveryTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsCancelled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("OrderTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2023, 5, 21, 15, 11, 28, 880, DateTimeKind.Local).AddTicks(7749));
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -110,9 +116,10 @@ namespace OnlineStoreApp.Migrations
                         {
                             Id = 1,
                             DeliveryAddress = "123",
-                            DeliveryTime = new DateTime(2023, 5, 17, 1, 25, 37, 363, DateTimeKind.Local).AddTicks(8217),
+                            DeliveryTime = new DateTime(2023, 5, 21, 16, 29, 28, 881, DateTimeKind.Local).AddTicks(1554),
+                            IsCancelled = false,
                             IsDeleted = false,
-                            OrderStatus = "InDelivery",
+                            OrderTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = 3
                         });
                 });
@@ -247,7 +254,7 @@ namespace OnlineStoreApp.Migrations
                             Email = "luka@luka.com",
                             FullName = "Luka Ciric",
                             IsDeleted = false,
-                            Password = "$2a$11$dkGOVvKjRUnOG1qPGFC5cuY2u0qp5vceZquTZfsGu7w5HiWk7GWbq",
+                            Password = "$2a$11$Z4cM/mNaek.s99C62m4eE.5ZpzdfRXMC6mtfRihank6EYEH2FDb..",
                             Type = "Administrator",
                             Username = "luka",
                             VerificationStatus = "Waiting"
@@ -260,7 +267,7 @@ namespace OnlineStoreApp.Migrations
                             Email = "luka1@luka.com",
                             FullName = "Luka Ciric",
                             IsDeleted = false,
-                            Password = "$2a$11$TZV6Lv8BB69Ga6Ekz5tjR.Gz6ygP012uZH7pWk/oSxThs2f3HAcCK",
+                            Password = "$2a$11$KR5w0bO3h6Ea1gify/lmlOKw1au/enlJ0jFO58XZ5Q0VptKKmscY6",
                             Type = "Seller",
                             Username = "luka1",
                             VerificationStatus = "Waiting"
@@ -273,7 +280,7 @@ namespace OnlineStoreApp.Migrations
                             Email = "luka2@luka.com",
                             FullName = "Luka Ciric",
                             IsDeleted = false,
-                            Password = "$2a$11$wGZFbEsA3HIEw8lTC4gMtuPSa5tmGuMcjLrBhMt57Zr4lNiRgmre.",
+                            Password = "$2a$11$zuykXoZ3soFEBkcGPTbHheLCAmcPRkPsSRsR5ePm6.42ulV0D.AP6",
                             Type = "Buyer",
                             Username = "luka2",
                             VerificationStatus = "Waiting"

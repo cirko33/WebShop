@@ -4,6 +4,7 @@ using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces;
 using OnlineStoreApp.Interfaces.IServices;
 using OnlineStoreApp.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineStoreApp.Services
 {
@@ -18,20 +19,6 @@ namespace OnlineStoreApp.Services
             _mapper = mapper;
         }
 
-        public async Task AddImage(int id, int userId, IFormFile image)
-        {
-            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
-            var product = user.Products!.Find(x => x.Id == id) ?? throw new UnauthorizedException("Product doesn't belong to you.");
-
-            using (var ms = new MemoryStream())
-            {
-                image.CopyTo(ms);
-                product.Image = ms.ToArray();
-            }
-
-            _unitOfWork.Products.Update(product);
-            await _unitOfWork.Save();
-        }
 
         public async Task AddProduct(CreateProductDTO product, int userId)
         {
@@ -40,6 +27,14 @@ namespace OnlineStoreApp.Services
                 throw new BadRequestException("Error with id in token. Logout and login again");
 
             prod.SellerId = userId;
+            if(product.ImageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    product.ImageFile.CopyTo(ms);
+                    prod.Image = ms.ToArray();
+                }
+            }
             await _unitOfWork.Products.Insert(prod);
             await _unitOfWork.Save();
         }
@@ -59,7 +54,7 @@ namespace OnlineStoreApp.Services
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
 
-            var orders = await _unitOfWork.Orders.GetAll(x => x.OrderStatus == OrderStatus.InDelivery, null, new List<string> { "Items" });
+            var orders = await _unitOfWork.Orders.GetAll(x => !x.IsCancelled, null, new List<string> { "Items" });
             if(orders != null)
                 orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
                 
@@ -103,6 +98,17 @@ namespace OnlineStoreApp.Services
             prod.Name = product.Name;
             prod.Description = product.Description;
             prod.Price = product.Price;
+            if(product.ImageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    product.ImageFile.CopyTo(ms);
+                    prod.Image = ms.ToArray();
+                }
+            }
+
+            _unitOfWork.Products.Update(prod);
+            await _unitOfWork.Save();
         }
     }
 }

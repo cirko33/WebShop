@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineStoreApp.DTOs;
 using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces.IServices;
+using System.Text;
 
 namespace OnlineStoreApp.Controllers
 {
@@ -49,23 +50,7 @@ namespace OnlineStoreApp.Controllers
                 throw new BadRequestException("Bad ID. Logout and login.");
 
             var products = await _sellerService.GetProducts(id);
-            products.ForEach(x =>
-            {
-                x.ImageToImg = "data:image/png;base64" + Convert.ToBase64String(x.Image!);
-                x.Image = null;
-            });
             return Ok(new { products = products });
-        }
-
-        [Authorize(Roles = "Seller")]
-        [HttpPost("products/image")]
-        public async Task<IActionResult> UpdateImage(int id, IFormFile image)
-        {
-            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
-                throw new BadRequestException("Bad ID. Logout and login.");
-
-            await _sellerService.AddImage(id, userId, image);
-            return Ok();
         }
 
         [Authorize(Roles = "Seller")]
@@ -81,7 +66,7 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize(Roles = "Seller")]
         [HttpPost("products")]
-        public async Task<IActionResult> AddProduct(CreateProductDTO productDTO)
+        public async Task<IActionResult> AddProduct([FromForm]CreateProductDTO productDTO)
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
                 throw new BadRequestException("Bad ID. Logout and login.");
@@ -92,7 +77,7 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize(Roles = "Seller")]
         [HttpPut("products")]
-        public async Task<IActionResult> UpdateProduct(ProductDTO productDTO)
+        public async Task<IActionResult> UpdateProduct([FromForm]ProductDTO productDTO)
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
                 throw new BadRequestException("Bad ID. Logout and login.");

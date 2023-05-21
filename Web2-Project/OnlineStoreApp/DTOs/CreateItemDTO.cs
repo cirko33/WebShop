@@ -4,9 +4,9 @@ namespace OnlineStoreApp.DTOs
 {
     public class CreateItemDTO
     {
-        [Required]
+        [Required, Range(1, int.MaxValue)]
         public int Amount { get; set; }
-        [Required]
+        [Required, Range(0, int.MaxValue)]
         public int ProductId { get; set; }
     }
 }

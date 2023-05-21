@@ -11,10 +11,11 @@ namespace OnlineStoreApp.Settings
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.DeliveryAddress).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.OrderTime).IsRequired().HasDefaultValue(DateTime.Now);
             builder.Property(x => x.DeliveryTime).IsRequired();
             builder.Property(x => x.Comment).HasMaxLength(200);
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false);
-            builder.Property(x => x.OrderStatus).HasConversion(new EnumToStringConverter<OrderStatus>()).IsRequired();
+            builder.Property(x => x.IsCancelled).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
             builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
 
             builder.HasData(new Order
@@ -22,7 +23,7 @@ namespace OnlineStoreApp.Settings
                 Id = 1,
                 DeliveryAddress = "123",
                 DeliveryTime = DateTime.Now.AddMinutes(78),
-                OrderStatus = OrderStatus.InDelivery,
+                IsCancelled = false,
                 UserId = 3
             });
         }

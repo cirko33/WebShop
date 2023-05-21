@@ -61,7 +61,7 @@ namespace OnlineStoreApp.Services
                 _configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: signIn);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

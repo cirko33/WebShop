@@ -12,7 +12,5 @@ namespace OnlineStoreApp.Interfaces.IServices
         public Task AddProduct(CreateProductDTO product, int userId);
         public Task<List<OrderDTO>> GetOrders(int userId);
         public Task<List<OrderDTO>> GetNewOrders(int userId);
-
-        public Task AddImage(int id, int userId, IFormFile image);
     }
 }

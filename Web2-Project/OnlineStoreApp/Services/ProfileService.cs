@@ -5,6 +5,7 @@ using OnlineStoreApp.Exceptions;
 using OnlineStoreApp.Interfaces;
 using OnlineStoreApp.Interfaces.IServices;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 using BC = BCrypt.Net;
 
 namespace OnlineStoreApp.Services
@@ -19,39 +20,33 @@ namespace OnlineStoreApp.Services
             _mapper = mapper;
         }
 
-        public async Task AddImage(int id, IFormFile image)
-        {
-            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
-
-            using (var ms = new MemoryStream())
-            {
-                image.CopyTo(ms);
-                user.Image = ms.ToArray();
-            }
-            _unitOfWork.Users.Update(user);
-            await _unitOfWork.Save();
-        }
-
         public async Task EditProfile(int id, EditProfileDTO profile)
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
-       
-            if (profile.Password != null && profile.NewPassword != null)
+            if (!string.IsNullOrEmpty(profile.Password) && !string.IsNullOrEmpty(profile.NewPassword))
             {
                 if (!BC.BCrypt.Verify(profile.Password, user.Password))
                     throw new BadRequestException("Password doesn't match");
 
                 user.Password = BC.BCrypt.HashPassword(profile.NewPassword);
             }
+
             user.Address = profile.Address;
             if(user.Email != profile.Email)
                 if ((await _unitOfWork.Users.Get(x => x.Email == profile.Email)) != null)
                     throw new BadRequestException("Email already exists.");
-            user.Email = profile.Email;
 
+            user.Email = profile.Email;
             user.Birthday = profile.Birthday;
             user.FullName = profile.FullName;
-            user.Image = profile.Image;
+            if(profile.ImageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    profile.ImageFile.CopyTo(ms);
+                    user.Image = ms.ToArray();
+                }
+            }
 
             if (user.Username != profile.Username)
                 if ((await _unitOfWork.Users.Get(x => x.Username == profile.Username)) != null)
@@ -62,16 +57,9 @@ namespace OnlineStoreApp.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<byte[]?> GetImage(int id)
-        {
-            var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
-            return user.Image ?? throw new NotFoundException("No image.");
-        }
-
         public async Task<UserDTO> GetProfile(int id)
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == id) ?? throw new UnauthorizedException("Error with id in token. Logout and login again"); 
-
             return _mapper.Map<UserDTO>(user);
         }
     }

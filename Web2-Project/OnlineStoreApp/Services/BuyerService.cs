@@ -27,7 +27,6 @@ namespace OnlineStoreApp.Services
                 throw new BadRequestException($"User doesn't exist.");
 
             order.UserId = userId;
-            order.OrderStatus = OrderStatus.InDelivery;
             foreach (var item in order.Items!)
             {
                 var product = await _unitOfWork.Products.Get(x => x.Id == item.ProductId);
@@ -44,7 +43,7 @@ namespace OnlineStoreApp.Services
                 _unitOfWork.Products.Update(product);
             }
 
-            order.DeliveryTime = DateTime.UtcNow.AddHours(1).AddMinutes(new Random().Next(59));
+            order.DeliveryTime = DateTime.Now.AddHours(1).AddMinutes(new Random().Next(59));
             await _unitOfWork.Orders.Insert(order);
             await _unitOfWork.Save();
         }
@@ -57,9 +56,13 @@ namespace OnlineStoreApp.Services
 
             var order = user.Orders!.First(x => x.Id == id);
             if (order == null)
-                throw new BadRequestException($"Order doesn't belong to user.");
+                throw new NotFoundException($"Order doesn't belong to user.");
 
-            order.OrderStatus = OrderStatus.Cancelled;
+
+            if(order.OrderTime.AddHours(1) < DateTime.Now)
+                throw new BadRequestException($"You can only cancel if it hasn't been an hour of order creation");
+
+            order.IsCancelled = true;
             foreach (var item in order.Items!)
             {
                 item.Product!.Amount += item.Amount;
@@ -76,7 +79,7 @@ namespace OnlineStoreApp.Services
             if (user == null)
                 throw new BadRequestException($"User doesn't exist.");
 
-            var orders = user.Orders!.FindAll(x => x.OrderStatus != OrderStatus.Cancelled);
+            var orders = user.Orders!.FindAll(x => !x.IsCancelled);
             return _mapper.Map<List<OrderDTO>>(orders);
         }
 

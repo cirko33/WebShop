@@ -14,7 +14,7 @@ namespace OnlineStoreApp.Settings
             builder.HasOne(x => x.Product).WithMany(x => x.Items).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.NoAction);
             builder.Property(x => x.CurrentPrice).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
 
             builder.HasData(new Item
             {

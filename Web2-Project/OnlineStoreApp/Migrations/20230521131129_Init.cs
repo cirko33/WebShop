@@ -42,9 +42,10 @@ namespace OnlineStoreApp.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 5, 21, 15, 11, 28, 880, DateTimeKind.Local).AddTicks(7749)),
                     DeliveryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsCancelled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
@@ -117,15 +118,15 @@ namespace OnlineStoreApp.Migrations
                 columns: new[] { "Id", "Address", "Birthday", "Email", "FullName", "Image", "Password", "Type", "Username", "VerificationStatus" },
                 values: new object[,]
                 {
-                    { 1, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka@luka.com", "Luka Ciric", null, "$2a$11$dkGOVvKjRUnOG1qPGFC5cuY2u0qp5vceZquTZfsGu7w5HiWk7GWbq", "Administrator", "luka", "Waiting" },
-                    { 2, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka1@luka.com", "Luka Ciric", null, "$2a$11$TZV6Lv8BB69Ga6Ekz5tjR.Gz6ygP012uZH7pWk/oSxThs2f3HAcCK", "Seller", "luka1", "Waiting" },
-                    { 3, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka2@luka.com", "Luka Ciric", null, "$2a$11$wGZFbEsA3HIEw8lTC4gMtuPSa5tmGuMcjLrBhMt57Zr4lNiRgmre.", "Buyer", "luka2", "Waiting" }
+                    { 1, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka@luka.com", "Luka Ciric", null, "$2a$11$Z4cM/mNaek.s99C62m4eE.5ZpzdfRXMC6mtfRihank6EYEH2FDb..", "Administrator", "luka", "Waiting" },
+                    { 2, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka1@luka.com", "Luka Ciric", null, "$2a$11$KR5w0bO3h6Ea1gify/lmlOKw1au/enlJ0jFO58XZ5Q0VptKKmscY6", "Seller", "luka1", "Waiting" },
+                    { 3, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka2@luka.com", "Luka Ciric", null, "$2a$11$zuykXoZ3soFEBkcGPTbHheLCAmcPRkPsSRsR5ePm6.42ulV0D.AP6", "Buyer", "luka2", "Waiting" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
-                columns: new[] { "Id", "Comment", "DeliveryAddress", "DeliveryTime", "OrderStatus", "UserId" },
-                values: new object[] { 1, null, "123", new DateTime(2023, 5, 17, 1, 25, 37, 363, DateTimeKind.Local).AddTicks(8217), "InDelivery", 3 });
+                columns: new[] { "Id", "Comment", "DeliveryAddress", "DeliveryTime", "UserId" },
+                values: new object[] { 1, null, "123", new DateTime(2023, 5, 21, 16, 29, 28, 881, DateTimeKind.Local).AddTicks(1554), 3 });
 
             migrationBuilder.InsertData(
                 table: "Products",

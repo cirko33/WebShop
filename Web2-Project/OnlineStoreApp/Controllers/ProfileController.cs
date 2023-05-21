@@ -30,35 +30,13 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> EditProfile(EditProfileDTO editProfileDTO)
+        public async Task<IActionResult> EditProfile([FromForm]EditProfileDTO editProfileDTO)
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
                 throw new BadRequestException("Bad ID. Logout and login.");
 
             await _profileService.EditProfile(id, editProfileDTO);
             return Ok();
-        }
-
-        [Authorize]
-        [HttpPost("image")]
-        public async Task<IActionResult> UploadImage(IFormFile image)
-        {
-            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
-                throw new BadRequestException("Bad ID. Logout and login.");
-
-            await _profileService.AddImage(id, image);
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpGet("image")]
-        public async Task<IActionResult> GetImage()
-        {
-            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
-                throw new BadRequestException("Bad ID. Logout and login.");
-
-            var image = await _profileService.GetImage(id);
-            return File(image!, "image/*");
         }
     }
 }

@@ -19,5 +19,6 @@ namespace OnlineStoreApp.DTOs
         public string? Address { get; set; }
         [Required]
         public UserType Type { get; set; }
+        public IFormFile? ImageFile { get; set; }
     }
 }
