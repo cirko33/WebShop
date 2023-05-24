@@ -1,22 +1,26 @@
 import { useState } from 'react';
+import userService from '../../services/userService';
 import "./styles.css"
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+  const [data, setData] = useState({
     username: '',
     password: '',
     email: '',
     fullName: '',
     birthday: '',
     address: '',
-    type: ''
+    type: '',
+    imageFile: ''
   });
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setData({
+      ...data,
       [e.target.name]: e.target.value
     });
   };
@@ -25,56 +29,65 @@ const Register = () => {
     e.preventDefault();
     const validationErrors = {};
 
-    if (!formData.username) {
+    if (!data.username) {
       validationErrors.username = 'Username is required';
-    } else if (!/^[a-zA-Z0-9]+$/.test(formData.username)) {
+    } else if (!/^[a-zA-Z0-9]+$/.test(data.username)) {
       validationErrors.username = 'Username can only contain alphanumeric characters';
-    } else if (formData.username.length > 100) {
+    } else if (data.username.length > 100) {
       validationErrors.username = 'Username cannot exceed 100 characters';
     }
 
-    if (!formData.password) {
+    if (!data.password) {
       validationErrors.password = 'Password is required';
-    } else if (formData.password.length > 100) {
+    } else if (data.password.length > 100) {
       validationErrors.password = 'Password cannot exceed 100 characters';
     }
 
-    if (!formData.email) {
+    if (!data.email) {
       validationErrors.email = 'Email is required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(data.email)) {
       validationErrors.email = 'Invalid email address';
-    } else if (formData.email.length > 100) {
+    } else if (data.email.length > 100) {
       validationErrors.email = 'Email cannot exceed 100 characters';
     }
     
-    if (!formData.fullName) {
+    if (!data.fullName) {
       validationErrors.fullName = 'Full Name is required';
-    } else if (formData.fullName.length > 100) {
+    } else if (data.fullName.length > 100) {
       validationErrors.fullName = 'Full Name cannot exceed 100 characters';
     }
     
-    if (!formData.birthday) {
+    if (!data.birthday) {
       validationErrors.birthday = 'Birthday is required';
     }
    
-    if (!formData.address) {
+    if (!data.address) {
       validationErrors.address = 'Address is required';
-    } else if (formData.address.length > 200) {
+    } else if (data.address.length > 200) {
       validationErrors.address = 'Address cannot exceed 200 characters';
     }
     
-    if (!formData.type) {
+    if (!data.type) {
       validationErrors.type = 'User Type is required';
+    } else if (data.type != 1 || data.type != 2) {
+      validationErrors.type = 'Type can be only seller or buyer';
     }
 
     setErrors(validationErrors);
 
     // If there are no validation errors, submit the form
-    if (Object.keys(validationErrors).length === 0) {
-      console.log('Form submitted successfully');
+    if (Object.keys(validationErrors).length !== 0) {
+      return;
     }
 
+    const formData = new FormData();
+    for(let prop in data) {
+      formData.append(prop, data[prop]);
+    }
 
+    // eslint-disable-next-line no-unused-vars
+    userService.register(formData).then(res => alert("Successfully registered!")).catch(e => { console.log(e); return; });
+    navigate("/");
   };
 
   return (
@@ -86,7 +99,7 @@ const Register = () => {
           <input
             type="text"
             name="username"
-            value={formData.username}
+            value={data.username}
             onChange={handleChange}
           />
           {errors.username && <span>{errors.username}</span>}
@@ -96,7 +109,7 @@ const Register = () => {
           <input
             type="password"
             name="password"
-            value={formData.password}
+            value={data.password}
             onChange={handleChange}
           />
           {errors.password && <span>{errors.password}</span>}
@@ -106,7 +119,7 @@ const Register = () => {
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={data.email}
             onChange={handleChange}
           />
           {errors.email && <span>{errors.email}</span>}
@@ -116,7 +129,7 @@ const Register = () => {
           <input
             type="text"
             name="fullName"
-            value={formData.fullName}
+            value={data.fullName}
             onChange={handleChange}
           />
           {errors.fullName && <span>{errors.fullName}</span>}
@@ -126,7 +139,7 @@ const Register = () => {
           <input
             type="date"
             name="birthday"
-            value={formData.birthday}
+            value={data.birthday}
             onChange={handleChange}
           />
           {errors.birthday && <span>{errors.birthday}</span>}
@@ -135,7 +148,7 @@ const Register = () => {
           <label>Address:</label>
           <textarea
             name="address"
-            value={formData.address}
+            value={data.address}
             onChange={handleChange}
           />
           {errors.address && <span>{errors.address}</span>}
@@ -144,7 +157,7 @@ const Register = () => {
           <label>User Type:</label>
           <select
             name="type"
-            value={formData.type}
+            value={data.type}
             onChange={handleChange}
           >
             <option value="">Select a type</option>
@@ -152,6 +165,12 @@ const Register = () => {
             <option value="2">Buyer</option>
           </select>
           {errors.type && <span>{errors.type}</span>}
+        </div>
+        <div>
+          <img title="Image" width={200} height={100} alt="No image" src={data.imageFile && URL.createObjectURL(data.imageFile)}/>
+        </div>
+        <div>
+          <input type="file" name="imageFile" accept="image/jpg" onChange={(e) => {console.log(e); setData({...data, imageFile: e.target.files[0]});}}/>
         </div>
         <button type="submit">Register</button>
       </form>

@@ -3,7 +3,7 @@ import api from "../api/api"
 
 const register = async (data) => {
     try {
-        await api.post("auth/register", data);
+        await api.post("auth/register", data, { headers: { "Content-Type":"multipart/form-data" }});
     }
     catch(e) {
         alert(e.response.data.Exception);

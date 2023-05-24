@@ -22,6 +22,7 @@ const Profile = () => {
     {
       setData({...data, ...res, birthday: res.birthday.split('T')[0]});
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [errors, setErrors] = useState({});
@@ -85,6 +86,7 @@ const Profile = () => {
       formData.append(prop, data[prop]);
     }
 
+    // eslint-disable-next-line no-unused-vars
     userService.setUser(formData).then(res => alert("Successfully changed!")).catch(e => { console.log(e); return; });
     navigate("/home");
   };
