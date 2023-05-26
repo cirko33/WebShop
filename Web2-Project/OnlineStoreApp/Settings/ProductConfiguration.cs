@@ -15,7 +15,7 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(200);
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
+            builder.HasOne(x => x.Seller).WithMany(x => x.Products).HasForeignKey(x => x.SellerId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasData(new Product
             {
@@ -25,7 +25,6 @@ namespace OnlineStoreApp.Settings
                 Amount = 10,
                 Description = "123",
                 SellerId = 2,
-                Image = Encoding.UTF8.GetBytes("Test")
             });
         }
     }

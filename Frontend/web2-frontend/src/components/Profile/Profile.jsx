@@ -88,7 +88,7 @@ const Profile = () => {
 
     // eslint-disable-next-line no-unused-vars
     userService.setUser(formData).then(res => alert("Successfully changed!")).catch(e => { console.log(e); return; });
-    navigate("/home");
+    navigate("/profile");
   };
 
   return (

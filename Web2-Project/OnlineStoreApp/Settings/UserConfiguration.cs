@@ -19,7 +19,6 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.Address).HasMaxLength(200).IsRequired();
             builder.Property(x => x.Type).HasConversion(new EnumToStringConverter<UserType>()).IsRequired();
             builder.Property(x => x.Birthday).IsRequired();
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
             builder.Property(x => x.VerificationStatus).HasConversion(new EnumToStringConverter<VerificationStatus>()).IsRequired();
 
             builder.HasData(new User

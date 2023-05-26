@@ -16,11 +16,9 @@ namespace OnlineStoreApp.Repository
             _context = storeDbContext;
             _dbSet = _context.Set<T>();
         }
-        public async Task Delete(int id)
+        public void Delete(T entity)
         {
-            T obj = await Get(x => x.Id == id);
-            if (obj != null)
-                obj.IsDeleted = true;
+            _dbSet.Remove(entity);
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> expression, List<string>? includes = null)
@@ -34,7 +32,6 @@ namespace OnlineStoreApp.Repository
                 }
             }
 
-            query = query.Where(q => q.IsDeleted == false);
             return (await query.FirstOrDefaultAsync(expression))!;
         }
 
@@ -57,7 +54,6 @@ namespace OnlineStoreApp.Repository
                 query = orderBy(query);
             }
 
-            query = query.Where(q => q.IsDeleted == false);
             return (await query.AsNoTracking().ToListAsync())!;
         }
 

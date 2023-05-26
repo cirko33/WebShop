@@ -44,9 +44,8 @@ namespace OnlineStoreApp.Services
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
 
             var product = user.Products!.Find(x => x.Id == id) ?? throw new UnauthorizedException("This product isn't yours");
-
-            product.IsDeleted = true;
-            _unitOfWork.Products.Update(product);
+            
+            _unitOfWork.Products.Delete(product);
             await _unitOfWork.Save();
         }
 

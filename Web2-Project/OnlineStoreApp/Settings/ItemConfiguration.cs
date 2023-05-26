@@ -10,11 +10,10 @@ namespace OnlineStoreApp.Settings
         public void Configure(EntityTypeBuilder<Item> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.HasOne(x => x.Order).WithMany(x => x.Items).HasForeignKey(x => x.OrderId);
+            builder.HasOne(x => x.Order).WithMany(x => x.Items).HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Product).WithMany(x => x.Items).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.NoAction);
             builder.Property(x => x.CurrentPrice).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
 
             builder.HasData(new Item
             {

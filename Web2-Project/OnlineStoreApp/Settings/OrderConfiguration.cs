@@ -15,8 +15,7 @@ namespace OnlineStoreApp.Settings
             builder.Property(x => x.DeliveryTime).IsRequired();
             builder.Property(x => x.Comment).HasMaxLength(200);
             builder.Property(x => x.IsCancelled).IsRequired().HasDefaultValue(false);
-            builder.Property(x => x.IsDeleted).HasDefaultValue(false).IsRequired();
-            builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
+            builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasData(new Order
             {

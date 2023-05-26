@@ -43,8 +43,7 @@ export const AuthContextProvider = (props) => {
             if(!token)
                 return null;
             const tokenDecoded = jwtDecode(token);
-            return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-            ;
+            return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         } catch(e) {
             console.log(e);
         }
