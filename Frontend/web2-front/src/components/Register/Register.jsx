@@ -69,8 +69,6 @@ const Register = () => {
     
     if (!data.type) {
       validationErrors.type = 'User Type is required';
-    } else if (data.type !== 1 || data.type !== 2) {
-      validationErrors.type = 'Type can be only seller or buyer';
     }
 
     setErrors(validationErrors);
@@ -85,9 +83,8 @@ const Register = () => {
       formData.append(prop, data[prop]);
     }
 
-    // eslint-disable-next-line no-unused-vars
-    userService.register(formData).then(res => alert("Successfully registered!")).catch(e => { console.log(e); return; });
-    navigate("/");
+    userService.register(formData).then(res => {alert("Successfully registered!"); navigate("/"); })
+      .catch(e => { console.log(e); return; });
   };
 
   return (

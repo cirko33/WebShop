@@ -4,7 +4,10 @@ import AuthContext from "../../contexts/auth-context";
 import classes from './Login.module.css'
 
 const Login = () => {
-  const [loginForm, setLoginForm] = useState({});
+  const [loginForm, setLoginForm] = useState({
+    email:"",
+    password:"",
+  });
   const context = useContext(AuthContext);
 
   const handleSubmit = async (e) => {

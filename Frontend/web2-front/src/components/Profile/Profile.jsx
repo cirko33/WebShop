@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import userService from "../../services/userService";
 import classes from './Profile.module.css'
 import { useNavigate } from "react-router-dom";
+import { convertImage } from "../../helpers/helpers";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -86,7 +87,6 @@ const Profile = () => {
       formData.append(prop, data[prop]);
     }
 
-    // eslint-disable-next-line no-unused-vars
     userService.setUser(formData).then(res => alert("Successfully changed!")).catch(e => { console.log(e); return; });
     navigate("/profile");
   };
@@ -180,7 +180,7 @@ const Profile = () => {
             src={
               data.imageFile
                 ? URL.createObjectURL(data.imageFile)
-                : data.image && `data:image/jpg;base64,${data.image}`
+                : data.image && convertImage(data.image)
             }
             className={classes.image}
           />
