@@ -32,7 +32,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Seller")]
-        [HttpGet("new-products")]
+        [HttpGet("new-orders")]
         public async Task<IActionResult> GetNewOrders()
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))

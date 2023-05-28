@@ -53,7 +53,7 @@ namespace OnlineStoreApp.Services
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
 
-            var orders = await _unitOfWork.Orders.GetAll(x => !x.IsCancelled, null, new List<string> { "Items" });
+            var orders = await _unitOfWork.Orders.GetAll(x => !x.IsCancelled && x.DeliveryTime > DateTime.Now, null, new List<string> { "Items.Product" });
             if(orders != null)
                 orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
                 
@@ -64,7 +64,7 @@ namespace OnlineStoreApp.Services
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
 
-            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items" });
+            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items.Product" });
             if (orders != null)
                 orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
 
