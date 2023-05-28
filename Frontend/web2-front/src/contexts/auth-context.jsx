@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom'
 const AuthContext = React.createContext({
     token: null,
     onLogout: () => {},
-    // eslint-disable-next-line no-unused-vars
     onLogin: (loginData) => {},
 });
 
@@ -58,7 +57,7 @@ export const AuthContextProvider = (props) => {
             type: userType
         }}>
             
-            {// eslint-disable-next-line react/prop-types
+            {
                 props.children
             }       
         </AuthContext.Provider>
