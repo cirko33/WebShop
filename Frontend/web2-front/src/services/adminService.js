@@ -7,7 +7,7 @@ const getVerifiedUsers = async() => {
     }
     catch(e) {
         alert(e.response.data.Exception);
-        return Promise.reject(e);
+        return [];
     }
 }
 
@@ -18,7 +18,7 @@ const getWaitingUsers = async() => {
     }
     catch(e) {
         alert(e.response.data.Exception);
-        return Promise.reject(e);
+        return [];
     }
 }
 
@@ -29,18 +29,16 @@ const getOrders = async() => {
     }
     catch(e) {
         alert(e.response.data.Exception);
-        return Promise.reject(e);
+        return [];
     }
 }
 
 const postVerifyUser = async(data) => {
     try {
-        const res = await api.post('admin/verify-user', data);
-        return res.data;
+        await api.post('admin/verify-user', data);
     }
     catch(e) {
         alert(e.response.data.Exception);
-        return Promise.reject(e);
     }
 }
 
