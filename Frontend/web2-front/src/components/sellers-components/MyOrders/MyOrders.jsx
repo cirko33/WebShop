@@ -6,7 +6,7 @@ const MyOrders = () => {
     const [orders, setOrders] = useState([]);
     useEffect(() => {
       sellerService.getMyOrders().then((res) => {
-        setOrders(res.orders);
+        setOrders(res);
       });
     }, []);
     return (

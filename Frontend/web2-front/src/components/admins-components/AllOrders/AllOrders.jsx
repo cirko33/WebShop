@@ -3,17 +3,13 @@ import adminService from "../../../services/adminService";
 import Orders from "../../../reusable/Order/Orders";
 
 const AllOrders = () => {
-  const [orders, setOrders] = useState(null);
-
+  const [orders, setOrders] = useState([]);
+  
   useEffect(() => {
-    adminService.getOrders().then((res) => {
-      setOrders(res.orders);
-    });
+    adminService.getOrders().then((res) => {setOrders(res); console.log(res)});
   }, []);
 
-  return (
-    <Orders orders={orders} title={"All orders"}/>
-  );
+  return <Orders orders={orders} title={"All orders"} />;
 };
 
 export default AllOrders;

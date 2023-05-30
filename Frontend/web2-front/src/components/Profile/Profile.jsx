@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import userService from "../../services/userService";
-import classes from './Profile.module.css'
+import classes from "./Profile.module.css";
 import { useNavigate } from "react-router-dom";
 import { convertImage } from "../../helpers/helpers";
 
@@ -19,11 +19,10 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    userService.getUser().then(res => 
-    {
-      setData({...data, ...res, birthday: res.birthday.split('T')[0]});
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    userService.getUser().then((res) => {
+      setData({ ...data, ...res, birthday: res.birthday.split("T")[0] });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [errors, setErrors] = useState({});
@@ -78,16 +77,20 @@ const Profile = () => {
     }
 
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length !== 0) 
-      return;
-    
+    if (Object.keys(validationErrors).length !== 0) return;
+
     const formData = new FormData();
-    
-    for(let prop in data) {
+    for (const prop in data) {
       formData.append(prop, data[prop]);
     }
 
-    userService.setUser(formData).then(res => alert("Successfully changed!")).catch(e => { console.log(e); return; });
+    userService
+      .setUser(formData)
+      .then((res) => alert("Successfully changed!"))
+      .catch((e) => {
+        console.log(e);
+        return;
+      });
     navigate("/profile");
   };
 
@@ -97,13 +100,7 @@ const Profile = () => {
       <form onSubmit={handleSubmit} className={classes.form}>
         <div>
           <label className={classes.label}>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={data.username}
-            onChange={handleChange}
-            className={classes.input}
-          />
+          <input type="text" name="username" value={data.username} onChange={handleChange} className={classes.input} />
           {errors.username && <span className={classes.error}>{errors.username}</span>}
         </div>
         <div>
@@ -130,58 +127,29 @@ const Profile = () => {
         </div>
         <div>
           <label className={classes.label}>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={data.email}
-            onChange={handleChange}
-            className={classes.input}
-          />
+          <input type="email" name="email" value={data.email} onChange={handleChange} className={classes.input} />
           {errors.email && <span className={classes.error}>{errors.email}</span>}
         </div>
         <div>
           <label className={classes.label}>Full Name:</label>
-          <input
-            type="text"
-            name="fullName"
-            value={data.fullName}
-            onChange={handleChange}
-            className={classes.input}
-          />
+          <input type="text" name="fullName" value={data.fullName} onChange={handleChange} className={classes.input} />
           {errors.fullName && <span className={classes.error}>{errors.fullName}</span>}
         </div>
         <div>
           <label className={classes.label}>Birthday:</label>
-          <input
-            type="date"
-            name="birthday"
-            value={data.birthday}
-            onChange={handleChange}
-            className={classes.input}
-          />
+          <input type="date" name="birthday" value={data.birthday} onChange={handleChange} className={classes.input} />
           {errors.birthday && <span className={classes.error}>{errors.birthday}</span>}
         </div>
         <div>
           <label className={classes.label}>Address:</label>
-          <textarea
-            name="address"
-            value={data.address}
-            onChange={handleChange}
-            className={classes.textarea}
-          />
+          <textarea name="address" value={data.address} onChange={handleChange} className={classes.textarea} />
           {errors.address && <span className={classes.error}>{errors.address}</span>}
         </div>
         <div>
           <img
             title="Image"
-            width={200}
-            height={100}
             alt="Add"
-            src={
-              data.imageFile
-                ? URL.createObjectURL(data.imageFile)
-                : data.image && convertImage(data.image)
-            }
+            src={data.imageFile ? URL.createObjectURL(data.imageFile) : data.image && convertImage(data.image)}
             className={classes.image}
           />
         </div>
@@ -191,13 +159,14 @@ const Profile = () => {
             name="imageFile"
             accept="image/jpg"
             onChange={(e) => {
-              console.log(e);
               setData({ ...data, imageFile: e.target.files[0] });
             }}
             className={classes.fileInput}
           />
         </div>
-        <button type="submit" className={classes.submitButton}>Save</button>
+        <button type="submit" className={classes.submitButton}>
+          Save
+        </button>
       </form>
     </div>
   );

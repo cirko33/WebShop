@@ -10,6 +10,8 @@ import AllOrders from "../components/admins-components/AllOrders/AllOrders";
 import NewOrders from "../components/sellers-components/NewOrders/NewOrders";
 import MyOrders from "../components/sellers-components/MyOrders/MyOrders";
 import Products from "../components/sellers-components/Products/Products";
+import NewOrder from "../components/buyer-components/NewOrder/NewOrder";
+import PreviousOrders from "../components/buyer-components/PreviousOrders/PreviousOrders";
 
 const Router = () => {
     const context = useContext(AuthContext);
@@ -27,6 +29,8 @@ const Router = () => {
             <Route path="/new-orders" element={context.token && context.type() === "Seller" ? <NewOrders /> : <Navigate to="/"/>} />
             <Route path="/my-orders" element={context.token && context.type() === "Seller" ? <MyOrders /> : <Navigate to="/"/>} />
             <Route path="/products" element={context.token && context.type() === "Seller" ? <Products /> : <Navigate to="/"/>} />
+            <Route path="/new-order" element={context.token && context.type() === "Buyer" ? <NewOrder /> : <Navigate to="/"/>} />
+            <Route path="/previous-orders" element={context.token && context.type() === "Buyer" ? <PreviousOrders /> : <Navigate to="/"/>} />
         </Routes>
     );
 }

@@ -79,7 +79,7 @@ const Register = () => {
     }
 
     const formData = new FormData();
-    for(let prop in data) {
+    for(const prop in data) {
       formData.append(prop, data[prop]);
     }
 

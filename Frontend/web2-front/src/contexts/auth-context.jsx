@@ -19,13 +19,13 @@ export const AuthContextProvider = (props) => {
 
     const loginHandler = async(loginData) => {
         try {
-            const res = await api.post('/auth/login', loginData)
+            const res = await api.post('auth/login', loginData)
             if(!res)
                 return;
 
             setToken(res.data.token);
-            localStorage.setItem('token', res.data.token); 
-            navigate("/home")
+            localStorage.setItem('token', res.data);
+            navigate(0);
         } catch (e){
             alert(e.response.data.Exception);
         }

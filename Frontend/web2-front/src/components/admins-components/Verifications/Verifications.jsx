@@ -10,11 +10,11 @@ const Verifications = () => {
 
   const refresh = () => {
     adminService.getWaitingUsers().then((res) => {
-      setWaitingUsers(res.users);
+      setWaitingUsers(res);
     });
 
     adminService.getVerifiedUsers().then((res) => {
-      setVerifiedUsers(res.users);
+      setVerifiedUsers(res);
     });
   }
   useEffect(() => {
