@@ -27,8 +27,7 @@ namespace OnlineStoreApp.Migrations
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VerificationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,12 +41,12 @@ namespace OnlineStoreApp.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 5, 21, 15, 11, 28, 880, DateTimeKind.Local).AddTicks(7749)),
+                    OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 5, 30, 14, 43, 9, 807, DateTimeKind.Local).AddTicks(692)),
                     DeliveryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    OrderPrice = table.Column<double>(type: "float", nullable: false),
                     IsCancelled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,9 +69,8 @@ namespace OnlineStoreApp.Migrations
                     Price = table.Column<double>(type: "float", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    SellerId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    SellerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,9 +91,9 @@ namespace OnlineStoreApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
-                    CurrentPrice = table.Column<double>(type: "float", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,11 +104,6 @@ namespace OnlineStoreApp.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Item_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -118,25 +111,25 @@ namespace OnlineStoreApp.Migrations
                 columns: new[] { "Id", "Address", "Birthday", "Email", "FullName", "Image", "Password", "Type", "Username", "VerificationStatus" },
                 values: new object[,]
                 {
-                    { 1, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka@luka.com", "Luka Ciric", null, "$2a$11$Z4cM/mNaek.s99C62m4eE.5ZpzdfRXMC6mtfRihank6EYEH2FDb..", "Administrator", "luka", "Waiting" },
-                    { 2, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka1@luka.com", "Luka Ciric", null, "$2a$11$KR5w0bO3h6Ea1gify/lmlOKw1au/enlJ0jFO58XZ5Q0VptKKmscY6", "Seller", "luka1", "Waiting" },
-                    { 3, "Nest 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka2@luka.com", "Luka Ciric", null, "$2a$11$zuykXoZ3soFEBkcGPTbHheLCAmcPRkPsSRsR5ePm6.42ulV0D.AP6", "Buyer", "luka2", "Waiting" }
+                    { 1, "Admin 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@luka.com", "Admin Admin", null, "$2a$11$Eg3bhCAUENNtHSxidNmW3en2IsHocsnLwqw6J4DVx6IDR02kufnwe", "Administrator", "admin", "Waiting" },
+                    { 2, "Seller 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "luka.ciric2000@gmail.com", "Seller Seller", null, "$2a$11$WbkM.ijkpW.kvd4fgkTtRe/MTJxiqTLZqNWwRaIfmef4IeonU77vC", "Seller", "seller", "Waiting" },
+                    { 3, "Buyer 123", new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "buyer@luka.com", "Buyer Buyer", null, "$2a$11$W35YyxpraMFOcu5bx7Bu4OWN68NeHY7f.FDvuZRLsuKSr3eivlK0y", "Buyer", "buyer", "Waiting" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
-                columns: new[] { "Id", "Comment", "DeliveryAddress", "DeliveryTime", "UserId" },
-                values: new object[] { 1, null, "123", new DateTime(2023, 5, 21, 16, 29, 28, 881, DateTimeKind.Local).AddTicks(1554), 3 });
+                columns: new[] { "Id", "Comment", "DeliveryAddress", "DeliveryTime", "OrderPrice", "UserId" },
+                values: new object[] { 1, null, "123", new DateTime(2023, 5, 30, 15, 56, 9, 807, DateTimeKind.Local).AddTicks(3884), 500.0, 3 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Amount", "Description", "Image", "Name", "Price", "SellerId" },
-                values: new object[] { 1, 10, "123", new byte[] { 84, 101, 115, 116 }, "Test", 100.0, 2 });
+                values: new object[] { 1, 10, "123", null, "Test", 100.0, 2 });
 
             migrationBuilder.InsertData(
                 table: "Item",
-                columns: new[] { "Id", "Amount", "CurrentPrice", "OrderId", "ProductId" },
-                values: new object[] { 1, 5, 100.0, 1, 1 });
+                columns: new[] { "Id", "Amount", "Name", "OrderId", "Price", "ProductId" },
+                values: new object[] { 1, 5, "Test", 1, 100.0, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Item_OrderId",
@@ -144,20 +137,9 @@ namespace OnlineStoreApp.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_ProductId",
-                table: "Item",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_Name",
-                table: "Products",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_SellerId",
@@ -184,10 +166,10 @@ namespace OnlineStoreApp.Migrations
                 name: "Item");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Users");

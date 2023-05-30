@@ -16,6 +16,5 @@ namespace OnlineStoreApp.Models
         [Required]
         public int SellerId { get; set; }
         public User? Seller { get; set; }
-        public List<Item>? Items { get; set; }
     }
 }

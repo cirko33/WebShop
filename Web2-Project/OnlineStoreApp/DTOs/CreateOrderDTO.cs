@@ -5,7 +5,7 @@ namespace OnlineStoreApp.DTOs
 {
     public class CreateOrderDTO
     {
-        [Required, MaxLength(100)]
+        [MaxLength(100)]
         public string? DeliveryAddress { get; set; }
         public string? Comment { get; set; }
         public List<CreateItemDTO>? Items { get; set; }

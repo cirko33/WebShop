@@ -33,11 +33,15 @@ namespace OnlineStoreApp.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<double>("CurrentPrice")
-                        .HasColumnType("float");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -46,8 +50,6 @@ namespace OnlineStoreApp.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Item");
 
                     b.HasData(
@@ -55,8 +57,9 @@ namespace OnlineStoreApp.Migrations
                         {
                             Id = 1,
                             Amount = 5,
-                            CurrentPrice = 100.0,
+                            Name = "Test",
                             OrderId = 1,
+                            Price = 100.0,
                             ProductId = 1
                         });
                 });
@@ -86,10 +89,13 @@ namespace OnlineStoreApp.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<double>("OrderPrice")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("OrderTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 5, 26, 13, 2, 58, 214, DateTimeKind.Local).AddTicks(1766));
+                        .HasDefaultValue(new DateTime(2023, 5, 30, 14, 43, 9, 807, DateTimeKind.Local).AddTicks(692));
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -105,8 +111,9 @@ namespace OnlineStoreApp.Migrations
                         {
                             Id = 1,
                             DeliveryAddress = "123",
-                            DeliveryTime = new DateTime(2023, 5, 26, 14, 20, 58, 214, DateTimeKind.Local).AddTicks(5900),
+                            DeliveryTime = new DateTime(2023, 5, 30, 15, 56, 9, 807, DateTimeKind.Local).AddTicks(3884),
                             IsCancelled = false,
+                            OrderPrice = 500.0,
                             OrderTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = 3
                         });
@@ -143,9 +150,6 @@ namespace OnlineStoreApp.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("SellerId");
 
@@ -224,37 +228,37 @@ namespace OnlineStoreApp.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "Nest 123",
+                            Address = "Admin 123",
                             Birthday = new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "luka@luka.com",
-                            FullName = "Luka Ciric",
-                            Password = "$2a$11$rGOQOUdMkVesLansni9g/O.Uv8zlBQvUWZ5OsREUl.a4tcdn8j7I2",
+                            Email = "admin@luka.com",
+                            FullName = "Admin Admin",
+                            Password = "$2a$11$Eg3bhCAUENNtHSxidNmW3en2IsHocsnLwqw6J4DVx6IDR02kufnwe",
                             Type = "Administrator",
-                            Username = "luka",
+                            Username = "admin",
                             VerificationStatus = "Waiting"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "Nest 123",
+                            Address = "Seller 123",
                             Birthday = new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "luka1@luka.com",
-                            FullName = "Luka Ciric",
-                            Password = "$2a$11$5HCTHT6M.B5w/VR8jIH4VOE0pNN5jYaKRnKlvR6IjnDA2MUtD7rCu",
+                            Email = "luka.ciric2000@gmail.com",
+                            FullName = "Seller Seller",
+                            Password = "$2a$11$WbkM.ijkpW.kvd4fgkTtRe/MTJxiqTLZqNWwRaIfmef4IeonU77vC",
                             Type = "Seller",
-                            Username = "luka1",
+                            Username = "seller",
                             VerificationStatus = "Waiting"
                         },
                         new
                         {
                             Id = 3,
-                            Address = "Nest 123",
+                            Address = "Buyer 123",
                             Birthday = new DateTime(1978, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "luka2@luka.com",
-                            FullName = "Luka Ciric",
-                            Password = "$2a$11$7MZXdOWlLRQs6vtvHbsckul6tSZLJVz3Cvd2LuWyCBErVrnQnZOGW",
+                            Email = "buyer@luka.com",
+                            FullName = "Buyer Buyer",
+                            Password = "$2a$11$W35YyxpraMFOcu5bx7Bu4OWN68NeHY7f.FDvuZRLsuKSr3eivlK0y",
                             Type = "Buyer",
-                            Username = "luka2",
+                            Username = "buyer",
                             VerificationStatus = "Waiting"
                         });
                 });
@@ -267,15 +271,7 @@ namespace OnlineStoreApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineStoreApp.Models.Product", "Product")
-                        .WithMany("Items")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Order", b =>
@@ -301,11 +297,6 @@ namespace OnlineStoreApp.Migrations
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Order", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
                 {
                     b.Navigation("Items");
                 });

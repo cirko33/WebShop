@@ -22,7 +22,7 @@ namespace OnlineStoreApp.Controllers
         public async Task<IActionResult> GetVerifiedUsers()
         {
             var users = await _administrationService.GetVerifiedUsers();
-            return Ok(new { users = users });
+            return Ok(users);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -30,7 +30,7 @@ namespace OnlineStoreApp.Controllers
         public async Task<IActionResult> GetWaitingUsers()
         {
             var users = await _administrationService.GetWaitingUsers();
-            return Ok(new { users = users });
+            return Ok(users);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -46,7 +46,7 @@ namespace OnlineStoreApp.Controllers
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _administrationService.GetAllOrders();
-            return Ok(new { orders = orders });
+            return Ok(orders);
         }
     }
 }

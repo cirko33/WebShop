@@ -6,11 +6,12 @@ namespace OnlineStoreApp.Models
     {
         [Required]
         public int ProductId { get; set; }
-        public Product? Product { get; set; }
         [Required]
         public int Amount { get; set; }
+        [Required]
+        public string? Name { get; set; }
         [Required] 
-        public double CurrentPrice { get; set; }
+        public double Price { get; set; }
         [Required]
         public int OrderId { get; set; }
         public Order? Order { get; set; }

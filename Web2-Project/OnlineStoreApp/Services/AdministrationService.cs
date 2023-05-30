@@ -21,8 +21,7 @@ namespace OnlineStoreApp.Services
 
         public async Task<List<OrderDTO>> GetAllOrders()
         {
-            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items.Product" });
-  
+            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items" });
             return _mapper.Map<List<OrderDTO>>(orders);
         }
 

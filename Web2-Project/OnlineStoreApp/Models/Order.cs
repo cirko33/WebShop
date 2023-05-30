@@ -13,6 +13,8 @@ namespace OnlineStoreApp.Models
         public DateTime DeliveryTime { get; set; }
         public string? Comment { get; set; }
         [Required]
+        public double OrderPrice { get; set; }
+        [Required]
         public bool IsCancelled { get; set; } = false;
         [Required]
         public int UserId { get; set; }

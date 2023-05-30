@@ -24,7 +24,7 @@ namespace OnlineStoreApp.Controllers
         public async Task<IActionResult> GetProductsAsync() 
         {
             var products = await _buyerService.GetProducts();
-            return Ok(new { products = products });
+            return Ok(products);
         }
 
         [Authorize(Roles = "Buyer")]
@@ -34,7 +34,7 @@ namespace OnlineStoreApp.Controllers
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
                 throw new BadRequestException("Bad ID. Logout and login.");
             var orders  = await _buyerService.GetMyOrders(id);
-            return Ok(new { orders = orders });
+            return Ok(orders);
         }
 
         [Authorize(Roles = "Buyer")]

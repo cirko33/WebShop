@@ -13,6 +13,7 @@ namespace OnlineStoreApp.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly double deliveryFee = 99;
 
         public BuyerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -23,10 +24,15 @@ namespace OnlineStoreApp.Services
         public async Task CreateOrder(CreateOrderDTO createOrder, int userId)
         {
             var order = _mapper.Map<Order>(createOrder);
-            if ((await _unitOfWork.Users.Get(x => x.Id == userId)) == null)
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId);
+            if (user == null)
                 throw new BadRequestException($"User doesn't exist.");
 
+            if (order.DeliveryAddress == null)
+                order.DeliveryAddress = user.Address;
             order.UserId = userId;
+            order.OrderPrice = 0;
+            var ids = new List<int>();
             foreach (var item in order.Items!)
             {
                 var product = await _unitOfWork.Products.Get(x => x.Id == item.ProductId);
@@ -41,16 +47,25 @@ namespace OnlineStoreApp.Services
 
                 product.Amount -= item.Amount;
                 _unitOfWork.Products.Update(product);
+
+                item.Name = product.Name;
+                item.Price = product.Price;
+                order.OrderPrice += item.Price;
+                if(!ids.Contains(product.SellerId))
+                {
+                    order.OrderPrice += deliveryFee;
+                    ids.Add(product.SellerId);
+                }
             }
 
-            order.DeliveryTime = DateTime.Now.AddHours(1).AddMinutes(new Random().Next(59));
+            order.DeliveryTime = DateTime.Now.AddHours(1).AddMinutes(new Random().Next(180));
             await _unitOfWork.Orders.Insert(order);
             await _unitOfWork.Save();
         }
 
         public async Task CancelOrder(int userId, int id)
         {
-            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Orders.Items.Product" });
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Orders.Items" });
             if(user == null)
                 throw new BadRequestException($"User doesn't exist.");
 
@@ -65,8 +80,12 @@ namespace OnlineStoreApp.Services
             order.IsCancelled = true;
             foreach (var item in order.Items!)
             {
-                item.Product!.Amount += item.Amount;
-                _unitOfWork.Products.Update(item.Product);
+                var product = await _unitOfWork.Products.Get(x => x.Id == item.ProductId);
+                if(product != null)
+                {
+                    product.Amount += item.Amount;
+                    _unitOfWork.Products.Update(product);
+                }
             }
 
             _unitOfWork.Orders.Update(order);
@@ -75,7 +94,7 @@ namespace OnlineStoreApp.Services
 
         public async Task<List<OrderDTO>> GetMyOrders(int userId)
         {
-            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Orders.Items.Product" });
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Orders.Items" });
             if (user == null)
                 throw new BadRequestException($"User doesn't exist.");
 

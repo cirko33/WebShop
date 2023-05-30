@@ -11,17 +11,19 @@ namespace OnlineStoreApp.Settings
         {
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Order).WithMany(x => x.Items).HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.Product).WithMany(x => x.Items).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.NoAction);
-            builder.Property(x => x.CurrentPrice).IsRequired();
+            builder.Property(x => x.Name).IsRequired();
+            builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
+            builder.Property(x => x.ProductId).IsRequired();
 
             builder.HasData(new Item
             {
                 Id = 1,
                 ProductId = 1,
                 OrderId = 1,
-                CurrentPrice = 100,
-                Amount = 5
+                Price = 100,
+                Amount = 5,
+                Name = "Test"
             });
         }
     }

@@ -22,7 +22,7 @@ namespace OnlineStoreApp.Controllers
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var token = await _authService.Login(loginDTO);
-            return Ok(new { token = token });
+            return Ok(token);
         }
 
         [AllowAnonymous]

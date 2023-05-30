@@ -24,22 +24,22 @@ namespace OnlineStoreApp.Settings
             builder.HasData(new User
             {
                 Id = 1,
-                Username = "luka",
-                Email = "luka@luka.com",
-                FullName = "Luka Ciric",
+                Username = "admin",
+                Email = "admin@luka.com",
+                FullName = "Admin Admin",
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
-                Address = "Nest 123",
+                Address = "Admin 123",
                 Type = UserType.Administrator,
                 Birthday = new DateTime(1978, 12, 11)
             },
             new User
             {
                 Id = 2,
-                Username = "luka1",
-                Email = "luka1@luka.com",
-                FullName = "Luka Ciric",
+                Username = "seller",
+                Email = "luka.ciric2000@gmail.com",
+                FullName = "Seller Seller",
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
-                Address = "Nest 123",
+                Address = "Seller 123",
                 Type = UserType.Seller,
                 Birthday = new DateTime(1978, 12, 11),
                 VerificationStatus = VerificationStatus.Waiting,
@@ -47,11 +47,11 @@ namespace OnlineStoreApp.Settings
             new User
             {
                 Id = 3,
-                Username = "luka2",
-                Email = "luka2@luka.com",
-                FullName = "Luka Ciric",
+                Username = "buyer",
+                Email = "buyer@luka.com",
+                FullName = "Buyer Buyer",
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
-                Address = "Nest 123",
+                Address = "Buyer 123",
                 Type = UserType.Buyer,
                 Birthday = new DateTime(1978, 12, 11)
             });

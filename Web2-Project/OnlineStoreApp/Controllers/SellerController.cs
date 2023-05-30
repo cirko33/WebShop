@@ -28,7 +28,7 @@ namespace OnlineStoreApp.Controllers
                 throw new BadRequestException("Bad ID. Logout and login.");
 
             var orders = await _sellerService.GetOrders(id);
-            return Ok(new { orders = orders });
+            return Ok(orders);
         }
 
         [Authorize(Roles = "Seller")]
@@ -39,7 +39,7 @@ namespace OnlineStoreApp.Controllers
                 throw new BadRequestException("Bad ID. Logout and login.");
 
             var orders = await _sellerService.GetNewOrders(id);
-            return Ok(new { orders = orders });
+            return Ok(orders);
         }
 
         [Authorize(Roles = "Seller")]
@@ -50,7 +50,7 @@ namespace OnlineStoreApp.Controllers
                 throw new BadRequestException("Bad ID. Logout and login.");
 
             var products = await _sellerService.GetProducts(id);
-            return Ok(new { products = products });
+            return Ok(products);
         }
 
         [Authorize(Roles = "Seller")]
@@ -60,8 +60,8 @@ namespace OnlineStoreApp.Controllers
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
                 throw new BadRequestException("Bad ID. Logout and login.");
 
-            var orders = await _sellerService.GetProduct(id, userId);
-            return Ok(new { orders = orders });
+            var product = await _sellerService.GetProduct(id, userId);
+            return Ok(product);
         }
 
         [Authorize(Roles = "Seller")]
