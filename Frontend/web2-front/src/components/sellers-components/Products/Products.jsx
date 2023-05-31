@@ -18,7 +18,7 @@ const Products = () => {
 
   return (
     <div>
-      <Typography variant="h4">My products</Typography>
+      <Typography variant="h4" sx={{display:"flex", justifyContent:"center", color:"blue"}}>My products</Typography>
       <div className={classes.cardContainer}>
         <ProductUpdateForm
           open={open}

@@ -39,7 +39,7 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize(Roles = "Buyer")]
         [HttpPost("order")]
-        public async Task<IActionResult> CreateOrder(CreateOrderDTO createOrder)
+        public async Task<IActionResult> CreateOrder(CreateOrderDTO  createOrder)
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
                 throw new BadRequestException("Bad ID. Logout and login.");

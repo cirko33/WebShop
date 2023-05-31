@@ -10,8 +10,8 @@ import AllOrders from "../components/admins-components/AllOrders/AllOrders";
 import NewOrders from "../components/sellers-components/NewOrders/NewOrders";
 import MyOrders from "../components/sellers-components/MyOrders/MyOrders";
 import Products from "../components/sellers-components/Products/Products";
-import NewOrder from "../components/buyer-components/NewOrder/NewOrder";
 import PreviousOrders from "../components/buyer-components/PreviousOrders/PreviousOrders";
+import NewOrder from "../components/buyer-components/NewOrder/NewOrder";
 
 const Router = () => {
     const context = useContext(AuthContext);

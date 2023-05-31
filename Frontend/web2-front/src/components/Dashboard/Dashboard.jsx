@@ -25,7 +25,7 @@ const Dashboard = () => {
         )}
         {context.type() === 'Buyer' && (
           <>
-            <Link to="/new-order" className={classes.but}><Button variant="contained">New orders</Button></Link>
+            <Link to="/new-order" className={classes.but}><Button variant="contained">New order</Button></Link>
             <Link to="/previous-orders" className={classes.but}><Button variant="contained">Previous orders</Button></Link>
           </>
         )}

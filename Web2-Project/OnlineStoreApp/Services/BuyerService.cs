@@ -28,10 +28,12 @@ namespace OnlineStoreApp.Services
             if (user == null)
                 throw new BadRequestException($"User doesn't exist.");
 
-            if (order.DeliveryAddress == null)
+            if (string.IsNullOrEmpty(order.DeliveryAddress))
                 order.DeliveryAddress = user.Address;
+
             order.UserId = userId;
             order.OrderPrice = 0;
+            order.OrderTime = DateTime.Now;
             var ids = new List<int>();
             foreach (var item in order.Items!)
             {

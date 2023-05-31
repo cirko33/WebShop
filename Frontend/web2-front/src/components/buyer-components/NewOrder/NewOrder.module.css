@@ -1,57 +1,52 @@
 .cardContainer {
-    display: flex;
-    flex-wrap: wrap;
-    width: 930px;
-  }
-  
-  .card {
-    margin-right: 10px;
-    margin-top: 10px;
-    box-sizing: border-box;
-    border: 1px solid #000;
-    height: 350px;
-    max-height: 350px;
-    width: 300px;
-    max-width: 300px;
-  }
-  
-  .image {
-    max-height: 150px;
-    width: auto;
-    height: auto;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    object-fit: contain;
-    margin-bottom: 5px;
-    margin-right: 10px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
 
-  .numb {
-    max-width: 25px;
-    background-color: #0c1215;
-    border: 0;
-    color: whitesmoke;
-    justify-content: center;
-  }
-  
-  .button {
-    min-width: 20px;
-    min-height: 20px;
-    max-width: 20px;
-    max-height: 20px;
-    margin-right: 10px;
-    margin-left: 10px;
-  }
+.card {
+  margin-right: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  height: 350px;
+  max-height: 350px;
+  width: 250px;
+  max-width: 250px;
+}
 
-  .buyButton {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    z-index: 9999;
-    min-width: 50px;
-    min-height: 50px;
-    max-width: 50px;
-    max-height: 50px;
-    margin-right: 50px;
-    margin-bottom: 50px;
-  }
+.image {
+  max-height: 150px;
+  width: auto;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  object-fit: contain;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.numb {
+  max-width: 25px;
+  background-color: #0c1215;
+  border: 0;
+  color: whitesmoke;
+  justify-content: center;
+}
+
+.wrap {
+  display: flex;
+  justify-content: space-between;
+  color: blue;
+}
+
+.wrapRight {
+  margin-left: auto;
+  color: blue;
+}
+
+.wrapLeft {
+  margin-right: auto;
+}

@@ -3,11 +3,7 @@ import api from "../api/api";
 import jwtDecode from "jwt-decode";
 import {useNavigate} from 'react-router-dom'
 
-const AuthContext = React.createContext({
-    token: null,
-    onLogout: () => {},
-    onLogin: (loginData) => {},
-});
+const AuthContext = React.createContext();
 
 export const AuthContextProvider = (props) => {
     const [token, setToken] = useState(null);
@@ -48,13 +44,25 @@ export const AuthContextProvider = (props) => {
         }
     };
 
+    const inType = (type) => {
+        try {
+            if(!token)
+                return null;
+            const tokenDecoded = jwtDecode(token);
+            return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === type;
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     return (
         <AuthContext.Provider
         value={{
             token: token,
             onLogout: logoutHandler,
             onLogin: loginHandler,
-            type: userType
+            type: userType,
+            inType: inType,
         }}>
             
             {
