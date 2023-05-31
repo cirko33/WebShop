@@ -52,7 +52,7 @@ namespace OnlineStoreApp.Services
 
                 item.Name = product.Name;
                 item.Price = product.Price;
-                order.OrderPrice += item.Price;
+                order.OrderPrice += item.Price * item.Amount;
                 if(!ids.Contains(product.SellerId))
                 {
                     order.OrderPrice += deliveryFee;
@@ -100,13 +100,13 @@ namespace OnlineStoreApp.Services
             if (user == null)
                 throw new BadRequestException($"User doesn't exist.");
 
-            var orders = user.Orders!.FindAll(x => !x.IsCancelled);
+            var orders = user.Orders!.FindAll(x => !x.IsCancelled).OrderByDescending(x => x.OrderTime);
             return _mapper.Map<List<OrderDTO>>(orders);
         }
 
         public async Task<List<ProductDTO>> GetProducts()
         {
-            var products = await _unitOfWork.Products.GetAll();
+            var products = await _unitOfWork.Products.GetAll(null, null, new List<string> { "Seller" });
             return _mapper.Map<List<ProductDTO>>(products);
         }
     }

@@ -11,6 +11,7 @@ namespace OnlineStoreApp.Config
             CreateMap<User, RegisterDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, EditProfileDTO>().ReverseMap();
+            CreateMap<User, SellerDTO>().ReverseMap();
 
             CreateMap<Order, CreateOrderDTO>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();

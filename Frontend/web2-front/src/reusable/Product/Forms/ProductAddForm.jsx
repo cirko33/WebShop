@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import classes from "./Products.module.css";
+import classes from "./Forms.module.css";
 import { useState } from "react";
 import sellerService from "../../../services/sellerService";
 

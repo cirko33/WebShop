@@ -57,7 +57,7 @@ namespace OnlineStoreApp.Services
             if(orders != null)
                 orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
                 
-            return _mapper.Map<List<OrderDTO>>(orders);
+            return _mapper.Map<List<OrderDTO>>(orders!.OrderByDescending(x => x.OrderTime));
         }
 
         public async Task<List<OrderDTO>> GetOrders(int userId)
@@ -68,7 +68,7 @@ namespace OnlineStoreApp.Services
             if (orders != null)
                 orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.Id)));
 
-            return _mapper.Map<List<OrderDTO>>(orders);
+            return _mapper.Map<List<OrderDTO>>(orders!.OrderByDescending(x => x.OrderTime));
         }
 
         public async Task<ProductDTO> GetProduct(int id, int userId)

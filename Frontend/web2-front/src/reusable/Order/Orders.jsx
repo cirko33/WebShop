@@ -7,7 +7,7 @@ import buyerService from "../../services/buyerService";
 
 const Orders = ({ orders, title, updateOrders }) => {
   const status = (o) => {
-    return new Date(o.deliveryTime) > new Date() ? "In delivery" : "Delivered";
+    return o.isCancelled ? "Cancelled" : new Date(o.deliveryTime) > new Date() ? "In delivery" : "Delivered";
   };
   const context = useContext(AuthContext);
   const [countdowns, setCountdowns] = useState({});
@@ -52,7 +52,7 @@ const Orders = ({ orders, title, updateOrders }) => {
               setCountdowns({ ...countdowns, [index]: new Date(o.deliveryTime) - new Date() })}
             <CardContent>
               <Typography>Ordered: {dateTimeToString(o.orderTime)}</Typography>
-              {status(o) === "In delivery" && context.type() !== "Administrator" && (
+              {status(o) === "In delivery" && !context.inType("Administrator") && (
                 <Typography>Time to deliver: {timeToDeliver(countdowns[index])}</Typography>
               )}
               <Typography>Address: {o.deliveryAddress}</Typography>

@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import sellerService from "../../../services/sellerService";
-import classes from "./Products.module.css";
+import classes from "./Forms.module.css";
 import { convertImage } from "../../../helpers/helpers";
 
 const ProductUpdateForm = ({ open, setOpen, data, setData, updateProducts }) => {

@@ -21,7 +21,7 @@ namespace OnlineStoreApp.Services
 
         public async Task<List<OrderDTO>> GetAllOrders()
         {
-            var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items" });
+            var orders = await _unitOfWork.Orders.GetAll(null, x => x.OrderByDescending(y => y.OrderTime), new List<string> { "Items" });
             return _mapper.Map<List<OrderDTO>>(orders);
         }
 
@@ -50,7 +50,7 @@ namespace OnlineStoreApp.Services
             _unitOfWork.Users.Update(user);
 
             string message = user.VerificationStatus == VerificationStatus.Accepted ? $"You have been verified.\r\nYou can now sell." : "Your verification has been denied.\r\nPlease contact administrators.";
-            await _mailService.SendEmail("Verification status", message, user.Email!);
+            _ = Task.Run(async() => await _mailService.SendEmail("Verification status", message, user.Email!));
             await _unitOfWork.Save();
         }
     }

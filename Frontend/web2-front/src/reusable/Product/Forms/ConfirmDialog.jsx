@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { CartContext } from "../../../contexts/cart-context";
-import buyerService from "../../../services/buyerService";
+import buyerService from '../../../services/buyerService';
 import { useNavigate } from "react-router-dom";
-import classes from "./NewOrder.module.css";
+import classes from "./Forms.module.css";
 
 const ConfirmDialog = ({ open, setOpen, products }) => {
   const { cart, setCart } = useContext(CartContext);
@@ -19,12 +19,15 @@ const ConfirmDialog = ({ open, setOpen, products }) => {
   const writeItems = () => {
     let temp = [];
     let total = 0;
+    let sellers = [];
     for (const i in cart) {
       if (cart[i] !== 0) {
         const prod = products.find((it) => it.id === parseInt(i));
         if (!prod) continue;
         temp = [...temp, { ...prod, quantity: cart[i] }];
         total += prod.price * cart[i];
+        if(!sellers.find(it => it === prod.sellerId))
+         sellers = [...sellers, prod.sellerId];
       }
     }
     return (
@@ -41,7 +44,8 @@ const ConfirmDialog = ({ open, setOpen, products }) => {
             <hr />
           </>
         ))}
-        <div style={{ color: "red", fontSize: 20 }}>Total: {total} + delivery </div>
+        <div style={{ color: "red", fontSize: 20 }}>Total: {total} </div>
+        <div style={{ color: "red", fontSize: 20 }}>Delivery: {sellers.length * 99} </div>
       </>
     );
   };

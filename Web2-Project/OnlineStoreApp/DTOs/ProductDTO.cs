@@ -6,5 +6,7 @@ namespace OnlineStoreApp.DTOs
     {
         [Required]
         public int Id { get; set; }
+        public int SellerId { get; set; }
+        public SellerDTO? Seller { get; set; }
     }
 }
