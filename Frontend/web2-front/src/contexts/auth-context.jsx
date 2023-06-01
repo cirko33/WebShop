@@ -55,6 +55,20 @@ export const AuthContextProvider = (props) => {
         }
     }
 
+    const googleLogin = async(data) => {
+        try {
+            const res = await api.post('auth/google-sign-in', {token: data.credential})
+            if(!res)
+                return;
+
+            setToken(res.data.token);
+            localStorage.setItem('token', res.data);
+            navigate(0);
+        } catch (e){
+            alert(e.response.data.Exception);
+        }
+    }
+
     return (
         <AuthContext.Provider
         value={{
@@ -63,6 +77,7 @@ export const AuthContextProvider = (props) => {
             onLogin: loginHandler,
             type: userType,
             inType: inType,
+            googleLogin: googleLogin
         }}>
             
             {

@@ -7,5 +7,7 @@ namespace OnlineStoreApp.Interfaces.IServices
     {
         public Task<string> Login(LoginDTO loginDTO);
         public Task Register(RegisterDTO registerDTO);
+
+        public Task<string> GoogleSignIn(TokenDTO token);
     }
 }

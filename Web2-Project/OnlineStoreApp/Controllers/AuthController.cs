@@ -33,5 +33,12 @@ namespace OnlineStoreApp.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
+        [HttpPost("google-sign-in")]
+        public async Task<IActionResult> GoogleSignIn(TokenDTO token)
+        {
+            var returnToken = await _authService.GoogleSignIn(token);
+            return Ok(returnToken);
+        }
     }
 }

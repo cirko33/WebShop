@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/auth-context";
 import classes from './Login.module.css'
+import { GoogleLogin } from "@react-oauth/google";
 
 
 const Login = () => {
@@ -21,6 +22,10 @@ const Login = () => {
 
     await context.onLogin(loginForm);
   };
+
+  const handleGoogleSignIn = async (e) => {
+    await context.googleLogin(e);
+  }
 
   return (
     <div>
@@ -53,6 +58,9 @@ const Login = () => {
         {"You don't have an account? "}
         <Link to={"/register"} className={classes.link}>Register</Link>
       </p>
+      <div>
+        <GoogleLogin onSuccess={handleGoogleSignIn} onError={e => alert("Invalid google email.")}/>
+      </div>
     </div>
   );
 };
