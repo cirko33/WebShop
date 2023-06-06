@@ -137,7 +137,15 @@ const Profile = () => {
         </div>
         <div>
           <label className={classes.label}>Birthday:</label>
-          <input type="date" name="birthday" value={data.birthday} onChange={handleChange} className={classes.input} />
+          <input
+            type="date"
+            name="birthday"
+            value={data.birthday}
+            onChange={handleChange}
+            className={classes.input}
+            min="1900-01-01"
+            max={`${new Date().getFullYear() - 18}-01-01`}
+          />
           {errors.birthday && <span className={classes.error}>{errors.birthday}</span>}
         </div>
         <div>

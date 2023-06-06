@@ -140,6 +140,8 @@ const Register = () => {
           <input
             type="date"
             name="birthday"
+            min="1900-01-01"
+            max={`${new Date().getFullYear() - 18}-01-01`}
             value={data.birthday}
             onChange={handleChange}
             className={classes.input}
