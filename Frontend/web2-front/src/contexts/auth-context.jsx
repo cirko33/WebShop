@@ -19,9 +19,9 @@ export const AuthContextProvider = (props) => {
             if(!res)
                 return;
 
-            setToken(res.data.token);
+            setToken(res.data);
             localStorage.setItem('token', res.data);
-            navigate(0);
+            navigate('/home');
         } catch (e){
             alert(e.response.data.Exception);
         }
@@ -61,9 +61,9 @@ export const AuthContextProvider = (props) => {
             if(!res)
                 return;
 
-            setToken(res.data.token);
+            setToken(res.data);
             localStorage.setItem('token', res.data);
-            navigate(0);
+            navigate('/home');
         } catch (e){
             alert(e.response.data.Exception);
         }

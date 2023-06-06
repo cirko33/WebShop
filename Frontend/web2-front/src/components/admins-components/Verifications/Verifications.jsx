@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import adminService from "../../../services/adminService";
 import classes from "./Verifications.module.css";
 import WaitingTable from "./WaitingTable/WaitingTable";
-import VerifiedTable from "./VerifiedTable/VerifiedTable";
+import UserTable from "./UserTable/UserTable";
 
 const Verifications = () => {
-  const [waitingUsers, setWaitingUsers] = useState(null);
-  const [verifiedUsers, setVerifiedUsers] = useState(null);
+  const [waitingUsers, setWaitingUsers] = useState([]);
+  const [verifiedUsers, setVerifiedUsers] = useState([]);
+  const [declinedUsers, setDeclinedUsers] = useState([]);
+  const [buyers, setBuyers] = useState([]);
 
   const refresh = () => {
     adminService.getWaitingUsers().then((res) => {
@@ -16,28 +18,46 @@ const Verifications = () => {
     adminService.getVerifiedUsers().then((res) => {
       setVerifiedUsers(res);
     });
-  }
+
+    adminService.getDeclinedUsers().then((res) => {
+      setDeclinedUsers(res);
+    });
+
+    adminService.getBuyers().then((res) => {
+      setBuyers(res);
+    });
+  };
   useEffect(() => {
     refresh();
   }, []);
 
   return (
     <div>
-      {
-        waitingUsers && waitingUsers.length !== 0 &&
+      {waitingUsers && waitingUsers.length !== 0 && (
         <>
           <h2 className={classes.heading}>Verifications</h2>
-          <WaitingTable users={waitingUsers} refresh={refresh}/>
-          <br/>
+          <WaitingTable users={waitingUsers} refresh={refresh} />
+          <br />
         </>
-      }
-      {
-        verifiedUsers && verifiedUsers.length !== 0 &&
+      )}
+      {verifiedUsers && verifiedUsers.length !== 0 && (
         <>
           <h2 className={classes.heading}>Verified users</h2>
-          <VerifiedTable users={verifiedUsers} />
+          <UserTable users={verifiedUsers} />
         </>
-      }
+      )}
+      {declinedUsers && declinedUsers.length !== 0 && (
+        <>
+          <h2 className={classes.heading}>Declined users</h2>
+          <UserTable users={declinedUsers} />
+        </>
+      )}
+      {buyers && buyers.length !== 0 && (
+        <>
+          <h2 className={classes.heading}>Buyers</h2>
+          <UserTable users={buyers} />
+        </>
+      )}
     </div>
   );
 };

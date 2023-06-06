@@ -25,6 +25,18 @@ namespace OnlineStoreApp.Services
             return _mapper.Map<List<OrderDTO>>(orders);
         }
 
+        public async Task<List<UserDTO>> GetBuyers()
+        {
+            var users = await _unitOfWork.Users.GetAll(x => x.Type == UserType.Buyer);
+            return _mapper.Map<List<UserDTO>>(users);
+        }
+
+        public async Task<List<UserDTO>> GetDeclinedUsers()
+        {
+            var users = await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Declined && x.Type == UserType.Seller);
+            return _mapper.Map<List<UserDTO>>(users);
+        }
+
         public async Task<List<UserDTO>> GetVerifiedUsers()
         {
             var users = await _unitOfWork.Users.GetAll(x => x.VerificationStatus == VerificationStatus.Accepted && x.Type == UserType.Seller);

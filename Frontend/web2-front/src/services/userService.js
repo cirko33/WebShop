@@ -1,4 +1,5 @@
 import api from "../api/api"
+import { UserModel } from "../models/models";
 
 
 const register = async (data) => {
@@ -15,7 +16,7 @@ const register = async (data) => {
 const getUser = async () => {
     try {
         const res = await api.get("profile");
-        return res.data;
+        return res.data ? new UserModel(res.data) : null;
     }
     catch(e) {
         alert(e.response.data.Exception);

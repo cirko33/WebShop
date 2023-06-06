@@ -34,6 +34,22 @@ namespace OnlineStoreApp.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpGet("declined-users")]
+        public async Task<IActionResult> GetDeclinedUsers()
+        {
+            var users = await _administrationService.GetDeclinedUsers();
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("buyers")]
+        public async Task<IActionResult> GetBuyers()
+        {
+            var users = await _administrationService.GetBuyers();
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost("verify-user")]
         public async Task<IActionResult> GetWaitngUsers(VerifyDTO verifyDTO)
         {

@@ -1,7 +1,7 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
 import { tableColumns } from "../../../../helpers/helpers";
 
-const VerifiedTable = ({ users }) => {
+const UserTable = ({ users }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="simple table">
@@ -26,4 +26,4 @@ const VerifiedTable = ({ users }) => {
   );
 };
 
-export default VerifiedTable;
+export default UserTable;

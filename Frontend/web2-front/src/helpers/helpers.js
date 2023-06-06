@@ -12,11 +12,11 @@ export const tableColumns = (key, item) => {
 };
 
 export const dateToString = (date) => {
-  return new Date(date).toLocaleDateString();
+  return new Date(date).toLocaleDateString("en-GB");
 };
 
 export const dateTimeToString = (date) => {
-  return new Date(date).toLocaleString();
+  return new Date(date).toLocaleString("en-GB");
 };
 
 export const convertImage = (img) => {
