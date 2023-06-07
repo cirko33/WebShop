@@ -32,9 +32,9 @@ const ConfirmDialog = ({ open, setOpen, products }) => {
     }
     return (
       <>
-        {temp.map((o) => (
+        {temp.map((o, index) => (
           <>
-            <div className={classes.wrap}>
+            <div key={index} className={classes.wrap}>
               <div className={classes.wrapLeft}>Name: {o.name}</div>
               <div className={classes.wrapRight}>
                 <div>No: {o.quantity}</div>
