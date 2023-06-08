@@ -52,11 +52,14 @@ namespace OnlineStoreApp.Services
         public async Task<List<OrderDTO>> GetNewOrders(int userId)
         {
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
-
             var orders = await _unitOfWork.Orders.GetAll(x => !x.IsCancelled && x.DeliveryTime > DateTime.Now, null, new List<string> { "Items" });
+            var productIds = user.Products!.Select(x => x.Id);
             if(orders != null)
-                orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.ProductId)) && !x.IsCancelled);
-                
+                orders = orders.ToList().FindAll(x => x.Items!.Any(x => productIds.Contains(x.ProductId)) && !x.IsCancelled);
+
+            foreach (var order in orders!)
+                order.Items = order.Items!.FindAll(x => productIds.Contains(x.ProductId));
+            
             return _mapper.Map<List<OrderDTO>>(orders!.OrderByDescending(x => x.OrderTime));
         }
 
@@ -65,8 +68,12 @@ namespace OnlineStoreApp.Services
             var user = await _unitOfWork.Users.Get(x => x.Id == userId, new List<string> { "Products" }) ?? throw new UnauthorizedException("Error with id in token. Logout and login again");
 
             var orders = await _unitOfWork.Orders.GetAll(null, null, new List<string> { "Items" });
+            var productIds = user.Products!.Select(x => x.Id);
             if (orders != null)
-                orders = orders.ToList().FindAll(x => x.Items!.Any(x => user.Products!.Select(x => x.Id).Contains(x.ProductId)) && !x.IsCancelled);
+                orders = orders.ToList().FindAll(x => x.Items!.Any(x => productIds.Contains(x.ProductId)) && !x.IsCancelled);
+
+            foreach (var order in orders!)
+                order.Items = order.Items!.FindAll(x => productIds.Contains(x.ProductId));
 
             return _mapper.Map<List<OrderDTO>>(orders!.OrderByDescending(x => x.OrderTime));
         }
